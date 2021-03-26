@@ -4,6 +4,7 @@ import com.company.Main;
 import com.company.core.components.PageEntity.PageEntity;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.HashMap;
 
 public class MainFrame {
@@ -23,25 +24,31 @@ public class MainFrame {
     }
 
     public void init() {
-        JFrame frame = new JFrame(MainFrame.Text.get("frame-title"));
+        frame = new JFrame(MainFrame.Text.get("frame-title"));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(true);
         frame.setSize(width, height);
         frame.setVisible(true);
 
-        JPanel container = new JPanel();
-        container.setBounds(0, 0, width, height);
+        container = new JPanel();
+        container.setBackground(Color.GREEN);
+        container.setLayout(new BorderLayout());
         frame.add(container);
     }
 
     private void cleanContainer() {
         container.removeAll();
-        container.revalidate();
-        container.repaint();
+        rerenderElement(container);
+    }
+
+    private void rerenderElement(JComponent element) {
+        element.repaint();
+        element.revalidate();
     }
 
     public void renderPage(PageEntity newPage) {
         cleanContainer();
         container.add(newPage.render());
+        rerenderElement(container);
     }
 }
