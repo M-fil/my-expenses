@@ -11,7 +11,5 @@ public abstract class PageEntity {
         this.pageWrapper = new JPanel();
     }
 
-    public JPanel render() {
-        return pageWrapper;
-    };
+    public abstract JPanel render();
 }

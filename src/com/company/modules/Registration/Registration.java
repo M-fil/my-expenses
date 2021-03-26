@@ -1,27 +1,21 @@
 package com.company.modules.Registration;
 import com.company.core.components.PageEntity.PageEntity;
+import com.company.core.services.database.DatabaseHandler;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.concurrent.Callable;
-
-interface TextChangeListener {
-    void onChange(String value);
-}
 
 public class Registration extends PageEntity {
     JTextField loginTextField;
     JTextField passwordTextField;
+    DatabaseHandler dbHandler;
 
     public Registration() {
         super();
         Registration.Text.put("login-label-text", "Login");
         Registration.Text.put("password-label-text", "Password");
         Registration.Text.put("sign-in-button-text", "Sign in");
+        dbHandler = DatabaseHandler.getInstance();
     }
 
     private JTextField renderInputItem(
@@ -57,6 +51,9 @@ public class Registration extends PageEntity {
         submitButton.addActionListener((event) -> {
             String login = loginTextField.getText();
             String password = passwordTextField.getText();
+            String query = String.format("INSERT INTO users (name, password) VALUES ('%s', '%s')", login, password);
+            dbHandler.insert(query);
+            System.out.println("Success!");
         });
 
         wrapper.add(submitButton);
