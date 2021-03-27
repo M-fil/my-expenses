@@ -1,11 +1,14 @@
 package com.company.core.services.database.types;
 
 import com.company.core.services.database.Database;
+import com.company.core.services.interfaces.RequestResultType;
 import com.company.core.services.database.RequestTypes;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.HashMap;
 
 import static com.company.core.services.database.RequestTypes.*;
 
@@ -35,24 +38,36 @@ public class MySQL extends Database {
     }
 
     @Override
-    public void makeRequest(String query, RequestTypes requestType) {
-        if (requestType == Insert) {
-            try {
-                PreparedStatement statement = connection.prepareStatement(query);
+    public Object makeRequest(String query, RequestTypes requestType) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            if (requestType == Insert) {
                 int rows = statement.executeUpdate();
                 System.out.println("ROWS: " + rows);
                 if (rows < 1) {
                     throw new Exception("Update was failed");
                 }
-
                 System.out.println("A new row was created!");
-            } catch(Exception error) {
-                System.out.println(error.getMessage());
+            } else if (requestType == Update) {
+
+            } else if (requestType == Delete) {
+
+            } else if (requestType == Get) {
+                ResultSet result = statement.executeQuery(query);
+                HashMap<String, String> returnData = new HashMap<String, String>();
+                if (result.next()) {
+                    String login = result.getString("name");
+                    String password = result.getString("password");
+                    returnData.put("name", login);
+                    returnData.put("password", password);
+
+                    return returnData;
+                }
             }
-        } else if (requestType == Update) {
-
-        } else if (requestType == Delete) {
-
+        } catch (Exception error) {
+            System.out.println(error.getMessage());
         }
+
+        return null;
     }
 }

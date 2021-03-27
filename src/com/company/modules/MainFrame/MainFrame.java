@@ -1,6 +1,5 @@
 package com.company.modules;
 
-import com.company.Main;
 import com.company.core.components.PageEntity.PageEntity;
 
 import javax.swing.*;
@@ -11,6 +10,7 @@ public class MainFrame {
     static public HashMap<String, String> Text = new HashMap<String, String>();
     static public int DefaultWidth = 500;
     static public int DefaultHeight = 500;
+    static private MainFrame instance = null;
 
     private JFrame frame;
     private JPanel container;
@@ -21,9 +21,19 @@ public class MainFrame {
         MainFrame.Text.put("frame-title", "My Expenses");
         this.width = width;
         this.height = height;
+        init();
+        MainFrame.instance = this;
     }
 
-    public void init() {
+    static public MainFrame getInstance() {
+        if (MainFrame.instance == null) {
+            MainFrame.instance = new MainFrame(MainFrame.DefaultWidth, MainFrame.DefaultHeight);
+        }
+
+        return MainFrame.instance;
+    }
+
+    private void init() {
         frame = new JFrame(MainFrame.Text.get("frame-title"));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(true);

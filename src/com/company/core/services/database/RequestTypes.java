@@ -4,4 +4,5 @@ public enum RequestTypes {
     Insert,
     Delete,
     Update,
+    Get,
 }
