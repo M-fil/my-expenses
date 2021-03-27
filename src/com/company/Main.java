@@ -7,6 +7,8 @@ import com.company.core.services.propertiesReader.PropertiesReader;
 import com.company.modules.MainFrame;
 import com.company.modules.Registration.Registration;
 
+import java.util.Properties;
+
 public class Main {
     DatabaseHandler dbHandler;
 

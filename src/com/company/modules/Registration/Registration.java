@@ -4,6 +4,7 @@ import com.company.core.services.auth.AuthService;
 import com.company.core.services.interfaces.RequestResultType;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 
 public class Registration extends PageEntity {
@@ -27,12 +28,18 @@ public class Registration extends PageEntity {
         authService = new AuthService();
     }
 
-    private JTextField renderInputItem(
+    private JTextComponent renderInputItem(
             String labelText, String textFieldName,
-            int inputWidth, int inputHeight, JPanel parent
+            int inputWidth, int inputHeight, JPanel parent,
+            boolean isPassword
     ) {
         JPanel container = new JPanel();
-        JTextField textField = new JTextField();
+        JTextComponent textField = null;
+        if (isPassword) {
+            textField = new JPasswordField();
+        } else {
+            textField = new JTextField();
+        }
         JLabel label = new JLabel(labelText);
 
         textField.setName(textFieldName);
@@ -91,8 +98,12 @@ public class Registration extends PageEntity {
 
         String loginLabel = Registration.Text.get("login-label-text");
         String passwordLabel = Registration.Text.get("password-label-text");
-        loginTextField = renderInputItem(loginLabel, "login", 100, 30, wrapper);
-        passwordTextField = renderInputItem(passwordLabel, "password", 100, 30, wrapper);
+        loginTextField = (JTextField) renderInputItem(
+                loginLabel, "login", 100, 30, wrapper, false
+        );
+        passwordTextField = (JPasswordField) renderInputItem(
+                passwordLabel, "password", 100, 30, wrapper, true
+        );
         JButton submitButton = new JButton(Registration.Text.get("sign-up-button-text"));
         submitButton.addActionListener((event) -> submitCredentials());
 
