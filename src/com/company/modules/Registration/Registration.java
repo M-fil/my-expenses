@@ -4,6 +4,7 @@ import com.company.core.services.auth.AuthService;
 import com.company.core.services.interfaces.RequestResultType;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 
@@ -13,6 +14,8 @@ public class Registration extends PageEntity {
     private boolean isSignUpForm;
     private AuthService authService;
     private JLabel errorLabel;
+
+    private static int DEFAULT_WRAPPER_PADDING = 20;
 
     public Registration() {
         super();
@@ -26,30 +29,6 @@ public class Registration extends PageEntity {
         Registration.Text.put("sign-in-error", "There is no user with these login and password");
         isSignUpForm = true;
         authService = new AuthService();
-    }
-
-    private JTextComponent renderInputItem(
-            String labelText, String textFieldName,
-            int inputWidth, int inputHeight, JPanel parent,
-            boolean isPassword
-    ) {
-        JPanel container = new JPanel();
-        JTextComponent textField = null;
-        if (isPassword) {
-            textField = new JPasswordField();
-        } else {
-            textField = new JTextField();
-        }
-        JLabel label = new JLabel(labelText);
-
-        textField.setName(textFieldName);
-        textField.setPreferredSize(new Dimension(inputWidth, inputHeight));
-
-        container.add(label);
-        container.add(textField);
-        parent.add(container);
-
-        return textField;
     }
 
     private void showErrorMessage(String errorMessage, RequestResultType result) {
@@ -89,12 +68,39 @@ public class Registration extends PageEntity {
         submitButton.setText(submitButtonText);
     }
 
+    private JTextComponent renderInputItem(
+            String labelText, String textFieldName,
+            int inputWidth, int inputHeight, JPanel parent,
+            boolean isPassword
+    ) {
+        JPanel container = new JPanel();
+        container.setLayout(new GridLayout(2, 1));
+        JTextComponent textField = null;
+        if (isPassword) {
+            textField = new JPasswordField();
+        } else {
+            textField = new JTextField();
+        }
+        JLabel label = new JLabel(labelText);
+        textField.setName(textFieldName);
+        textField.setMaximumSize(new Dimension(inputWidth, inputHeight));
+
+        container.add(label);
+        container.add(textField);
+        parent.add(container);
+
+        return textField;
+    }
+
     @Override
     public JPanel render() {
         JPanel wrapper = new JPanel();
-        pageWrapper.setBackground(Color.BLACK);
-        pageWrapper.setLayout(new BorderLayout());
-        wrapper.setBackground(Color.YELLOW);
+        JPanel borderWrapper = new JPanel();
+
+        pageWrapper.setLayout(new GridBagLayout());
+        wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.Y_AXIS));
+        wrapper.setBorder(new EmptyBorder(DEFAULT_WRAPPER_PADDING, DEFAULT_WRAPPER_PADDING, DEFAULT_WRAPPER_PADDING, DEFAULT_WRAPPER_PADDING));
+        borderWrapper.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
 
         String loginLabel = Registration.Text.get("login-label-text");
         String passwordLabel = Registration.Text.get("password-label-text");
@@ -104,20 +110,27 @@ public class Registration extends PageEntity {
         passwordTextField = (JPasswordField) renderInputItem(
                 passwordLabel, "password", 100, 30, wrapper, true
         );
+
+        JPanel buttonsPanel1 = new JPanel();
+        JPanel buttonsPanel2 = new JPanel();
+
         JButton submitButton = new JButton(Registration.Text.get("sign-up-button-text"));
         submitButton.addActionListener((event) -> submitCredentials());
 
         JButton switchButton = new JButton(Registration.Text.get("switch-to-sign-up"));
-        switchButton.addActionListener((event) -> switchAuthButtons(switchButton, submitButton));
         switchButton.setBorderPainted(false);
+        switchButton.addActionListener((event) -> switchAuthButtons(switchButton, submitButton));
 
         errorLabel = new JLabel("");
         errorLabel.setForeground(Color.RED);
 
-        wrapper.add(submitButton);
-        wrapper.add(errorLabel);
-        wrapper.add(switchButton);
-        pageWrapper.add(wrapper);
+        buttonsPanel1.add(submitButton);
+        buttonsPanel2.add(switchButton);
+        wrapper.add(buttonsPanel1);
+        wrapper.add(buttonsPanel2);
+        borderWrapper.add(wrapper);
+
+        pageWrapper.add(borderWrapper);
         return this.pageWrapper;
     }
 }

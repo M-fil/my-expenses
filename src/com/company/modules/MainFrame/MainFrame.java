@@ -41,7 +41,6 @@ public class MainFrame {
         frame.setVisible(true);
 
         container = new JPanel();
-        container.setBackground(Color.GREEN);
         container.setLayout(new BorderLayout());
         frame.add(container);
     }
