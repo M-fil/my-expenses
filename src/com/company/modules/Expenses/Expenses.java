@@ -2,29 +2,40 @@ package com.company.modules.Expenses;
 
 import com.company.core.components.PageEntity.PageEntity;
 import com.company.core.services.auth.AuthService;
+import com.company.modules.Expenses.components.ExpensesHeader.ExpensesHeader;
+import com.company.modules.Expenses.components.FiltersBlock.FiltersBlock;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Expenses extends PageEntity {
-    AuthService authService;
+    private AuthService authService;
+    private ExpensesHeader expensesHeader;
+    private FiltersBlock filtersBlock;
+    static private int DEFAULT_MAIN_COMPONENTS_PADDING = 20;
 
     public Expenses() {
         super();
         authService = new AuthService();
+        expensesHeader = new ExpensesHeader(0, "$");
+        filtersBlock = new FiltersBlock();
     }
 
     @Override
     public JPanel render() {
-        JPanel container = new JPanel();
-        JLabel label = new JLabel("TEXT");
-        JButton signOutButton = new JButton("Sign out");
-        signOutButton.addActionListener((event) -> {
-            authService.signOut();
-        });
+        pageWrapper = new JPanel();
 
-        container.add(label);
-        container.add(signOutButton);
+        JPanel expensesHeaderElement = expensesHeader.render();
+        setTheSamePaddingForAllSides(DEFAULT_MAIN_COMPONENTS_PADDING, expensesHeaderElement);
 
-        return container;
+        JPanel filtersBlockElement = filtersBlock.render();
+        filtersBlockElement.setBackground(Color.YELLOW);
+
+        pageWrapper.add(expensesHeaderElement);
+        pageWrapper.add(filtersBlockElement);
+        pageWrapper.add(expensesHeaderElement);
+        pageWrapper.add(filtersBlockElement);
+
+        return pageWrapper;
     }
 }

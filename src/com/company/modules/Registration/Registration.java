@@ -108,7 +108,7 @@ public class Registration extends PageEntity {
 
         pageWrapper.setLayout(new GridBagLayout());
         wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.Y_AXIS));
-        wrapper.setBorder(new EmptyBorder(DEFAULT_WRAPPER_PADDING, DEFAULT_WRAPPER_PADDING, DEFAULT_WRAPPER_PADDING, DEFAULT_WRAPPER_PADDING));
+        setTheSamePaddingForAllSides(DEFAULT_WRAPPER_PADDING, wrapper);
         borderWrapper.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
 
         String loginLabel = Registration.Text.get("login-label-text");

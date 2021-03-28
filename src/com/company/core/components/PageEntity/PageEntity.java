@@ -1,6 +1,7 @@
 package com.company.core.components.PageEntity;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.util.HashMap;
 
 public abstract class PageEntity {
@@ -9,6 +10,10 @@ public abstract class PageEntity {
 
     public PageEntity() {
         this.pageWrapper = new JPanel();
+    }
+
+    public void setTheSamePaddingForAllSides(int paddingNumber, JComponent component) {
+        component.setBorder(new EmptyBorder(paddingNumber, paddingNumber, paddingNumber, paddingNumber));
     }
 
     public abstract JPanel render();

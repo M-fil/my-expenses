@@ -5,6 +5,7 @@ import com.company.core.services.database.DatabaseHandler;
 import com.company.core.services.database.types.MySQL;
 import com.company.core.services.propertiesReader.PropertiesReader;
 import com.company.modules.ErrorPage.ErrorPage;
+import com.company.modules.Expenses.Expenses;
 import com.company.modules.MainFrame;
 import com.company.modules.Registration.Registration;
 
@@ -27,7 +28,7 @@ public class Main {
             isError = true;
         } else {
             dbHandler = new DatabaseHandler().setDB(mySqlDB);
-            mainFrame.renderPage(new Registration());
+            mainFrame.renderPage(new Expenses());
             isError = false;
         }
     }
