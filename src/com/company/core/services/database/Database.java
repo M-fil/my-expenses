@@ -1,6 +1,6 @@
 package com.company.core.services.database;
 
-import com.company.core.services.interfaces.RequestResultType;
+import com.company.core.interfaces.RequestResultType;
 
 import java.util.HashMap;
 

@@ -1,7 +1,8 @@
 package com.company.core.services.database;
 
-import com.company.core.services.interfaces.RequestResultType;
+import com.company.core.interfaces.RequestResultType;
 
+import java.sql.ResultSet;
 import java.util.HashMap;
 
 public class DatabaseHandler {
@@ -17,9 +18,7 @@ public class DatabaseHandler {
     }
 
     public DatabaseHandler setDB(Database db) {
-        System.out.println("DB" + db);
         RequestResultType result = db.init();
-        System.out.println("RESULT " + result);
         if (result == RequestResultType.Success) {
             DatabaseHandler.db = db;
             return DatabaseHandler.getInstance();
@@ -30,7 +29,6 @@ public class DatabaseHandler {
 
     private Object makeRequest(String query, RequestTypes type) {
         try {
-            System.out.println("DB " + DatabaseHandler.db);
             if (DatabaseHandler.db == null) {
                 throw new Exception("You must specify database via setDB method");
             }
@@ -42,8 +40,8 @@ public class DatabaseHandler {
         return null;
     }
 
-    public void insert(String query) {
-        makeRequest(query, RequestTypes.Insert);
+    public HashMap<String, Integer> insert(String query) {
+        return (HashMap<String, Integer>) makeRequest(query, RequestTypes.Insert);
     }
 
     public void delete(String query) {
@@ -54,8 +52,8 @@ public class DatabaseHandler {
         makeRequest(query, RequestTypes.Update);
     }
 
-    public HashMap<String, String> get(String query) {
+    public ResultSet get(String query) {
         Object result = makeRequest(query, RequestTypes.Get);
-        return (HashMap<String, String>)result;
+        return (ResultSet) result;
     }
 }

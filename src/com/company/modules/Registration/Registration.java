@@ -2,10 +2,9 @@ package com.company.modules.Registration;
 import com.company.core.components.ErrorBlock.ErrorBlock;
 import com.company.core.components.PageEntity.PageEntity;
 import com.company.core.services.auth.AuthService;
-import com.company.core.services.interfaces.RequestResultType;
+import com.company.core.interfaces.RequestResultType;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 

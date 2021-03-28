@@ -1,4 +1,4 @@
-package com.company.core.services.interfaces;
+package com.company.core.interfaces;
 
 public enum RequestResultType {
     Success,

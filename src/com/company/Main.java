@@ -21,7 +21,6 @@ public class Main {
 
         MySQL mySqlDB = new MySQL(url, username, password);
         MainFrame mainFrame = MainFrame.getInstance();
-        System.out.println("mainFrame" + mainFrame);
 
         if (mySqlDB == null) {
             mainFrame.renderPage(new ErrorPage(MySQL.Messages.get("db-init-error")));

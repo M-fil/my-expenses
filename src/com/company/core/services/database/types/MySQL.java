@@ -1,7 +1,7 @@
 package com.company.core.services.database.types;
 
 import com.company.core.services.database.Database;
-import com.company.core.services.interfaces.RequestResultType;
+import com.company.core.interfaces.RequestResultType;
 import com.company.core.services.database.RequestTypes;
 
 import java.sql.Connection;
@@ -27,10 +27,8 @@ public class MySQL extends Database {
 
     @Override
     public RequestResultType init() {
-        System.out.println("INIT");
         try {
             connection = DriverManager.getConnection(serverUrl, username, password);
-            System.out.println(connection);
             return RequestResultType.Success;
         } catch (Exception error) {
             System.out.println("Error: " + error.getMessage());
@@ -42,28 +40,23 @@ public class MySQL extends Database {
     public Object makeRequest(String query, RequestTypes requestType) {
         try {
             PreparedStatement statement = connection.prepareStatement(query);
+
             if (requestType == Insert) {
                 int rows = statement.executeUpdate();
-                System.out.println("ROWS: " + rows);
                 if (rows < 1) {
                     throw new Exception("Update was failed");
                 }
-                System.out.println("A new row was created!");
+                HashMap<String, Integer> returnData = new HashMap<String, Integer>();
+                returnData.put("result", rows);
+
+                return returnData;
             } else if (requestType == Update) {
 
             } else if (requestType == Delete) {
 
             } else if (requestType == Get) {
                 ResultSet result = statement.executeQuery(query);
-                HashMap<String, String> returnData = new HashMap<String, String>();
-                if (result.next()) {
-                    String login = result.getString("name");
-                    String password = result.getString("password");
-                    returnData.put("name", login);
-                    returnData.put("password", password);
-
-                    return returnData;
-                }
+                return result;
             }
         } catch (Exception error) {
             System.out.println(error.getMessage());
