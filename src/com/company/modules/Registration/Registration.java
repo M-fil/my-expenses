@@ -1,4 +1,5 @@
 package com.company.modules.Registration;
+import com.company.core.components.ErrorBlock.ErrorBlock;
 import com.company.core.components.PageEntity.PageEntity;
 import com.company.core.services.auth.AuthService;
 import com.company.core.services.interfaces.RequestResultType;
@@ -13,7 +14,7 @@ public class Registration extends PageEntity {
     private JTextField passwordTextField;
     private boolean isSignUpForm;
     private AuthService authService;
-    private JLabel errorLabel;
+    private ErrorBlock errorBlock;
 
     private static int DEFAULT_WRAPPER_PADDING = 20;
 
@@ -29,11 +30,12 @@ public class Registration extends PageEntity {
         Registration.Text.put("sign-in-error", "There is no user with these login and password");
         isSignUpForm = true;
         authService = new AuthService();
+        errorBlock = new ErrorBlock("", 200, "center", Color.RED);
     }
 
     private void showErrorMessage(String errorMessage, RequestResultType result) {
         if (result == RequestResultType.Error) {
-            errorLabel.setText(errorMessage);
+            errorBlock.changeErrorText(errorMessage);
         }
     }
 
@@ -92,6 +94,13 @@ public class Registration extends PageEntity {
         return textField;
     }
 
+    private <T extends Component> JPanel createElementWithPanelWrapper(T element) {
+        JPanel panel = new JPanel();
+        panel.add(element);
+
+        return  panel;
+    }
+
     @Override
     public JPanel render() {
         JPanel wrapper = new JPanel();
@@ -111,9 +120,6 @@ public class Registration extends PageEntity {
                 passwordLabel, "password", 100, 30, wrapper, true
         );
 
-        JPanel buttonsPanel1 = new JPanel();
-        JPanel buttonsPanel2 = new JPanel();
-
         JButton submitButton = new JButton(Registration.Text.get("sign-up-button-text"));
         submitButton.addActionListener((event) -> submitCredentials());
 
@@ -121,12 +127,14 @@ public class Registration extends PageEntity {
         switchButton.setBorderPainted(false);
         switchButton.addActionListener((event) -> switchAuthButtons(switchButton, submitButton));
 
-        errorLabel = new JLabel("");
-        errorLabel.setForeground(Color.RED);
+        JPanel errorBlockHTML = errorBlock.render();
 
-        buttonsPanel1.add(submitButton);
-        buttonsPanel2.add(switchButton);
+        JPanel buttonsPanel1 = createElementWithPanelWrapper(submitButton);
+        JPanel buttonsPanel2 = createElementWithPanelWrapper(switchButton);
+        JPanel errorMessagePanel = createElementWithPanelWrapper(errorBlockHTML);
+
         wrapper.add(buttonsPanel1);
+        wrapper.add(errorMessagePanel);
         wrapper.add(buttonsPanel2);
         borderWrapper.add(wrapper);
 

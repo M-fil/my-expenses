@@ -39,6 +39,7 @@ public class AuthService {
     public RequestResultType signUpWithEmailAndPassword(String login, String password) {
         String query = String.format("INSERT INTO users (name, password) VALUES ('%s', '%s')", login, password);
         boolean isCredentialsMatch = checkIfUserAlreadyExists(login, password);
+        System.out.println("isCredentialsMatch " + isCredentialsMatch);
         if (!isCredentialsMatch) {
             dbHandler.insert(query);
             return signInWithEmailAndPassword(login, password);
