@@ -137,8 +137,8 @@ public class Registration extends PageEntity {
         wrapper.add(errorMessagePanel);
         wrapper.add(buttonsPanel2);
         borderWrapper.add(wrapper);
-
         pageWrapper.add(borderWrapper);
+
         return this.pageWrapper;
     }
 }

@@ -22,6 +22,7 @@ public class MySQL extends Database {
         this.serverUrl = serverUrl;
         this.username = username;
         this.password = password;
+        MySQL.Messages.put("db-init-error", "There is an error during db initialization");
     }
 
     @Override

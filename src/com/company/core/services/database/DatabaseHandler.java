@@ -22,9 +22,10 @@ public class DatabaseHandler {
         System.out.println("RESULT " + result);
         if (result == RequestResultType.Success) {
             DatabaseHandler.db = db;
+            return DatabaseHandler.getInstance();
         }
 
-        return DatabaseHandler.getInstance();
+        return null;
     }
 
     private Object makeRequest(String query, RequestTypes type) {

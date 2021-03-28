@@ -2,8 +2,14 @@ package com.company.core.services.database;
 
 import com.company.core.services.interfaces.RequestResultType;
 
+import java.util.HashMap;
+
 abstract public class Database {
-    public Database() {}
+    static public HashMap<String, String> Messages;
+
+    public Database() {
+        Database.Messages = new HashMap<String, String>();
+    }
 
     public abstract RequestResultType init();
     public abstract Object makeRequest(String query, RequestTypes requestType);
