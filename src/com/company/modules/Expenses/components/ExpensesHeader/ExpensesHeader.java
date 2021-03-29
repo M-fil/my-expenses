@@ -1,24 +1,27 @@
 package com.company.modules.Expenses.components.ExpensesHeader;
 
 import com.company.core.components.ComponentEntity.ComponentEntity;
+import com.company.core.interfaces.ExpenseCategory;
 import com.company.core.services.expenses.ExpensesService;
+import com.company.modules.Expenses.components.CreateExpenseModal.CreateExpenseModal;
 
 import javax.swing.*;
 import java.awt.*;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class ExpensesHeader extends ComponentEntity {
     int expensesAmount;
     String currency;
     ExpensesService expensesService;
+    ArrayList<ExpenseCategory> expenseCategories;
 
-    public ExpensesHeader(int expensesAmount, String currency) {
+    public ExpensesHeader(int expensesAmount, String currency, ArrayList<ExpenseCategory> categories) {
+        ExpensesHeader.Text.put("create-expense-text", "Create New Expense");
+
         this.expensesAmount = expensesAmount;
         this.currency = currency;
+        this.expenseCategories = categories;
         expensesService = new ExpensesService();
-        ExpensesHeader.Text.put("create-expense-text", "Create New Expense");
     }
 
     @Override
@@ -33,7 +36,9 @@ public class ExpensesHeader extends ComponentEntity {
 
         JButton createExpensesButton = new JButton(ExpensesHeader.Text.get("create-expense-text"));
         createExpensesButton.addActionListener((event) -> {
-            HashMap<String, Integer> result = expensesService.createNewExpense(1, 50, "$", "No Description", 1);
+            CreateExpenseModal modal = new CreateExpenseModal(CreateExpenseModal.DEFAULT_DIALOG_WIDTH, CreateExpenseModal.DEFAULT_DIALOG_HEIGHT);
+            modal.setCategories(expenseCategories);
+            modal.render();
         });
 
         headerContainer.add(totalExpensesLabel, BorderLayout.WEST);

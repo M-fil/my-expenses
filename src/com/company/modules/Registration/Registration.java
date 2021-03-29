@@ -1,5 +1,6 @@
 package com.company.modules.Registration;
 import com.company.core.components.ErrorBlock.ErrorBlock;
+import com.company.core.components.InputItem.InputItem;
 import com.company.core.components.PageEntity.PageEntity;
 import com.company.core.services.auth.AuthService;
 import com.company.core.interfaces.RequestResultType;
@@ -71,24 +72,16 @@ public class Registration extends PageEntity {
 
     private JTextComponent renderInputItem(
             String labelText, String textFieldName,
-            int inputWidth, int inputHeight, JPanel parent,
-            boolean isPassword
+            JPanel parent, boolean isPassword
     ) {
-        JPanel container = new JPanel();
-        container.setLayout(new GridLayout(2, 1));
         JTextComponent textField = null;
         if (isPassword) {
             textField = new JPasswordField();
         } else {
             textField = new JTextField();
         }
-        JLabel label = new JLabel(labelText);
-        textField.setName(textFieldName);
-        textField.setMaximumSize(new Dimension(inputWidth, inputHeight));
-
-        container.add(label);
-        container.add(textField);
-        parent.add(container);
+        InputItem inputItem = new InputItem(textField, labelText, textFieldName);
+        parent.add(inputItem.render());
 
         return textField;
     }
@@ -107,16 +100,16 @@ public class Registration extends PageEntity {
 
         pageWrapper.setLayout(new GridBagLayout());
         wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.Y_AXIS));
-        setTheSamePaddingForAllSides(DEFAULT_WRAPPER_PADDING, wrapper);
+        PageEntity.setTheSamePaddingForAllSides(DEFAULT_WRAPPER_PADDING, wrapper);
         borderWrapper.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
 
         String loginLabel = Registration.Text.get("login-label-text");
         String passwordLabel = Registration.Text.get("password-label-text");
         loginTextField = (JTextField) renderInputItem(
-                loginLabel, "login", 100, 30, wrapper, false
+                loginLabel, "login", wrapper, false
         );
         passwordTextField = (JPasswordField) renderInputItem(
-                passwordLabel, "password", 100, 30, wrapper, true
+                passwordLabel, "password", wrapper, true
         );
 
         JButton submitButton = new JButton(Registration.Text.get("sign-up-button-text"));

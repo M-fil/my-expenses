@@ -5,6 +5,7 @@ import com.company.core.interfaces.ExpenseCategory;
 import com.company.core.services.database.DatabaseHandler;
 
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -83,14 +84,14 @@ public class ExpensesService {
 
     public HashMap<String, Integer> createNewExpense(
             int userId, int amount, String currency,
-            String description, int categoryId
+            String description, int categoryId, LocalDate date
     ) {
         String listOfParams = "(userId, amount, currency, date, description, category)";
         String repeatedParams = ("'%s',").repeat(6);
         String listOfParamsToInsert = "(" + repeatedParams.substring(0, repeatedParams.length() - 1) + ")";
         String query = String.format(
                 "INSERT INTO expenses " + listOfParams + " VALUES " + listOfParamsToInsert,
-                userId, amount, currency, description, categoryId
+                userId, amount, currency, date, description, categoryId
         );
         return dbHandler.insert(query);
     }

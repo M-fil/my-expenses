@@ -1,6 +1,8 @@
 package com.company.modules.Expenses;
 
 import com.company.core.components.PageEntity.PageEntity;
+import com.company.core.interfaces.Expense;
+import com.company.core.interfaces.ExpenseCategory;
 import com.company.core.services.auth.AuthService;
 import com.company.core.services.expenses.ExpensesService;
 import com.company.modules.Expenses.components.ExpensesHeader.ExpensesHeader;
@@ -9,25 +11,29 @@ import com.company.modules.Expenses.components.FiltersBlock.FiltersBlock;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class Expenses extends PageEntity {
-    private AuthService authService;
+    static private int DEFAULT_MAIN_COMPONENTS_PADDING = 20;
+
     private ExpensesService expensesService;
+
+    private ArrayList<Expense> expenses;
+    private ArrayList<ExpenseCategory> categoriesList;
 
     private ExpensesHeader expensesHeader;
     private FiltersBlock filtersBlock;
     private ExpensesList expensesList;
-    static private int DEFAULT_MAIN_COMPONENTS_PADDING = 20;
 
     public Expenses() {
         super();
-        authService = new AuthService();
         expensesService = new ExpensesService();
+        expenses = expensesService.getAllExpenses();
+        categoriesList = expensesService.getAllCategories();
 
-        expensesHeader = new ExpensesHeader(0, "$");
+        expensesHeader = new ExpensesHeader(0, "$", categoriesList);
         filtersBlock = new FiltersBlock();
-        expensesList = new ExpensesList();
+        expensesList = new ExpensesList(expenses);
     }
 
     @Override
@@ -37,7 +43,7 @@ public class Expenses extends PageEntity {
         expensesService.getAllExpenses();
 
         JPanel expensesHeaderElement = expensesHeader.render();
-        setTheSamePaddingForAllSides(DEFAULT_MAIN_COMPONENTS_PADDING, expensesHeaderElement);
+        PageEntity.setTheSamePaddingForAllSides(DEFAULT_MAIN_COMPONENTS_PADDING, expensesHeaderElement);
 
         JPanel filtersBlockElement = filtersBlock.render();
         filtersBlockElement.setBackground(Color.YELLOW);

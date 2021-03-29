@@ -12,7 +12,7 @@ public abstract class PageEntity {
         this.pageWrapper = new JPanel();
     }
 
-    public void setTheSamePaddingForAllSides(int paddingNumber, JComponent component) {
+    static public void setTheSamePaddingForAllSides(int paddingNumber, JComponent component) {
         component.setBorder(new EmptyBorder(paddingNumber, paddingNumber, paddingNumber, paddingNumber));
     }
 

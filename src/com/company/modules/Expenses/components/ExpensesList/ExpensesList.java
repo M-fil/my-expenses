@@ -11,12 +11,10 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class ExpensesList extends ComponentEntity {
-    ExpensesService expensesService;
-    ArrayList<Expense> expenses;
+    private ArrayList<Expense> expenses;
 
-    public ExpensesList() {
-        expensesService = new ExpensesService();
-        expenses = expensesService.getAllExpenses();
+    public ExpensesList(ArrayList<Expense> expenses) {
+        this.expenses = expenses;
     }
 
     @Override
