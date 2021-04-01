@@ -48,8 +48,8 @@ public class DatabaseHandler {
         makeRequest(query, RequestTypes.Delete);
     }
 
-    public void update(String query) {
-        makeRequest(query, RequestTypes.Update);
+    public HashMap<String, Integer> update(String query) {
+        return (HashMap<String, Integer>) makeRequest(query, RequestTypes.Update);
     }
 
     public ResultSet get(String query) {

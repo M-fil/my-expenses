@@ -6,11 +6,14 @@ import com.company.core.components.NumberTextField.NumberTextField;
 import com.company.core.components.PageEntity.PageEntity;
 import com.company.core.interfaces.ExpenseCategory;
 import com.company.core.services.expenses.ExpensesService;
+import com.company.modules.Expenses.Expenses;
 import com.company.modules.MainFrame;
 import com.github.lgooddatepicker.components.DatePicker;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,9 +26,15 @@ public class CreateExpenseModal extends ComponentEntity {
 
     private int width;
     private int height;
-    private ExpensesService expensesService;
+    protected ExpensesService expensesService;
     private ArrayList<ExpenseCategory> categories;
     private ArrayList<String> categoriesNames;
+    protected InputItem expenseInput;
+    protected JButton createExpenseButton;
+    protected JComboBox selectCategoryBox;
+    protected InputItem descriptionInput;
+    protected DatePicker datePicker;
+    protected JDialog dialog;
 
     public CreateExpenseModal(int width, int height) {
         CreateExpenseModal.Text.put("no-description", "No Description");
@@ -69,26 +78,42 @@ public class CreateExpenseModal extends ComponentEntity {
         return container;
     }
 
+    public void repaintDialog() {
+        dialog.repaint();
+        dialog.revalidate();
+    }
+
+    public void show() {
+        dialog.setVisible(true);
+    }
+
     @Override
     public JPanel render() {
         JFrame frame = MainFrame.getInstance().getFrame();
         JPanel wrapper = new JPanel();
         PageEntity.setTheSamePaddingForAllSides(CreateExpenseModal.DEFAULT_DIALOG_PADDING, wrapper);
         wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.Y_AXIS));
-        JDialog dialog = new JDialog(frame, CreateExpenseModal.DEFAULT_TITLE, Dialog.ModalityType.DOCUMENT_MODAL);
+        dialog = new JDialog(frame, CreateExpenseModal.DEFAULT_TITLE, Dialog.ModalityType.DOCUMENT_MODAL);
         dialog.setBounds(150, 150, width, height);
         dialog.setResizable(false);
+        dialog.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                dialog.setVisible(false);
+            }
+        });
 
         JTextField numberTextField = new NumberTextField().getTextField();
-        InputItem descriptionInput = new InputItem(new JTextField(), CreateExpenseModal.Text.get("description-label"), "description");
-        InputItem expenseInput = new InputItem(numberTextField, CreateExpenseModal.Text.get("expense-label"), "expense");
+        descriptionInput = new InputItem(new JTextField(), CreateExpenseModal.Text.get("description-label"), "description");
+        expenseInput = new InputItem(numberTextField, CreateExpenseModal.Text.get("expense-label"), "expense");
         JPanel createExpenseButtonContainer = new JPanel();
-        JButton createExpenseButton = new JButton(CreateExpenseModal.Text.get("create-button-text"));
-        JComboBox selectCategoryBox = new JComboBox(categoriesNames.toArray());
+        createExpenseButton = new JButton(CreateExpenseModal.Text.get("create-button-text"));
+        selectCategoryBox = new JComboBox(categoriesNames.toArray());
         JPanel comboBoxContainer = createElementWithLabel(selectCategoryBox, CreateExpenseModal.Text.get("category-label"));
-        DatePicker datePicker = new DatePicker();
+        datePicker = new DatePicker();
         JPanel datePickerContainer = createElementWithLabel(datePicker, CreateExpenseModal.Text.get("expense-date-label"));
 
+        ComponentEntity.removeButtonAllActionListeners(createExpenseButton);
         createExpenseButton.addActionListener((event) -> {
             createExpense(
                     expenseInput.getTextValue(),
@@ -96,6 +121,7 @@ public class CreateExpenseModal extends ComponentEntity {
                     selectCategoryBox.getSelectedIndex(),
                     datePicker.getDate()
             );
+            Expenses.getInstance().rerenderExpenses();
         });
 
         createExpenseButtonContainer.add(createExpenseButton);
@@ -105,10 +131,7 @@ public class CreateExpenseModal extends ComponentEntity {
         wrapper.add(datePickerContainer);
         wrapper.add(createExpenseButtonContainer);
         dialog.add(wrapper);
-
-        dialog.setVisible(true);
-        dialog.repaint();
-        dialog.revalidate();
+        repaintDialog();
 
         return new JPanel();
     }

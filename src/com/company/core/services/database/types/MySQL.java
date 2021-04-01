@@ -41,7 +41,7 @@ public class MySQL extends Database {
         try {
             PreparedStatement statement = connection.prepareStatement(query);
 
-            if (requestType == Insert) {
+            if (requestType == Insert || requestType == Update) {
                 int rows = statement.executeUpdate();
                 if (rows < 1) {
                     throw new Exception("Update was failed");
@@ -50,8 +50,6 @@ public class MySQL extends Database {
                 returnData.put("result", rows);
 
                 return returnData;
-            } else if (requestType == Update) {
-
             } else if (requestType == Delete) {
 
             } else if (requestType == Get) {

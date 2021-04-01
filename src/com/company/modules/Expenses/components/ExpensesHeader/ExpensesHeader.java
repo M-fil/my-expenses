@@ -3,6 +3,7 @@ package com.company.modules.Expenses.components.ExpensesHeader;
 import com.company.core.components.ComponentEntity.ComponentEntity;
 import com.company.core.interfaces.ExpenseCategory;
 import com.company.core.services.expenses.ExpensesService;
+import com.company.modules.Expenses.Expenses;
 import com.company.modules.Expenses.components.CreateExpenseModal.CreateExpenseModal;
 
 import javax.swing.*;
@@ -39,6 +40,7 @@ public class ExpensesHeader extends ComponentEntity {
             CreateExpenseModal modal = new CreateExpenseModal(CreateExpenseModal.DEFAULT_DIALOG_WIDTH, CreateExpenseModal.DEFAULT_DIALOG_HEIGHT);
             modal.setCategories(expenseCategories);
             modal.render();
+            modal.show();
         });
 
         headerContainer.add(totalExpensesLabel, BorderLayout.WEST);

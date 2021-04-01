@@ -82,17 +82,36 @@ public class ExpensesService {
         }
     }
 
+    private String getQueryString() {
+        String listOfParams = "(userId, amount, currency, date, description, category)";
+        String repeatedParams = ("'%s',").repeat(6);
+        String listOfParamsToInsert = "(" + repeatedParams.substring(0, repeatedParams.length() - 1) + ")";
+
+        return listOfParams + " VALUES " + listOfParamsToInsert;
+    }
+
     public HashMap<String, Integer> createNewExpense(
             int userId, int amount, String currency,
             String description, int categoryId, LocalDate date
     ) {
-        String listOfParams = "(userId, amount, currency, date, description, category)";
-        String repeatedParams = ("'%s',").repeat(6);
-        String listOfParamsToInsert = "(" + repeatedParams.substring(0, repeatedParams.length() - 1) + ")";
+        String queryString = getQueryString();
         String query = String.format(
-                "INSERT INTO expenses " + listOfParams + " VALUES " + listOfParamsToInsert,
+                "INSERT INTO expenses " + queryString,
                 userId, amount, currency, date, description, categoryId
         );
         return dbHandler.insert(query);
+    }
+
+    public HashMap<String, Integer> updateExpense(
+            int expenseId, int userId, int amount, String currency,
+            String description, int categoryId, LocalDate date
+    ) {
+        String queryString = "userId='%s', amount='%s', currency='%s', date='%s', description='%s', category='%s'";
+        String query = String.format(
+                "UPDATE expenses SET " + queryString + " WHERE id='" + expenseId + "'",
+                userId, amount, currency, date, description, categoryId
+        );
+        System.out.println(query);
+        return dbHandler.update(query);
     }
 }

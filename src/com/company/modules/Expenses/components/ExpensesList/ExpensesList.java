@@ -2,8 +2,6 @@ package com.company.modules.Expenses.components.ExpensesList;
 
 import com.company.core.components.ComponentEntity.ComponentEntity;
 import com.company.core.interfaces.Expense;
-import com.company.core.services.expenses.ExpensesService;
-import com.company.modules.Expenses.Expenses;
 import com.company.modules.Expenses.components.ExpenseItem.ExpenseItem;
 
 import javax.swing.*;
@@ -26,7 +24,8 @@ public class ExpensesList extends ComponentEntity {
                     expense.id,
                     expense.amount,
                     expense.currency,
-                    expense.description
+                    expense.description,
+                    expense.date
             );
             expenseElement.setCategory(expense.category);
             expensesListContainer.add(expenseElement.render());

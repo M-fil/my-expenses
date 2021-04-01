@@ -21,6 +21,10 @@ public class InputItem extends ComponentEntity {
         return textComponent.getText();
     }
 
+    public void setTextValue(String text) {
+        textComponent.setText(text);
+    }
+
     @Override
     public JPanel render() {
         JPanel container = new JPanel();
