@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 public class ExpenseItem extends ComponentEntity {
     private String description;
-    private int amount;
+    private float amount;
     private String currency;
     private int id;
     private LocalDate creationDate;
@@ -17,7 +17,7 @@ public class ExpenseItem extends ComponentEntity {
     private JButton editButton;
     private JButton deleteButton;
 
-    public ExpenseItem(int id, int amount, String currency, String description, LocalDate creationDate) {
+    public ExpenseItem(int id, float amount, String currency, String description, LocalDate creationDate) {
         this.id = id;
         this.amount = amount;
         this.currency = currency;

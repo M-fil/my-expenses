@@ -65,7 +65,7 @@ public class ExpensesService {
                 ExpenseCategory expenseCategory = getCategoryById(result.getInt("category"));
 
                 Expense expense = new Expense(
-                        result.getInt("amount"),
+                        result.getFloat("amount"),
                         result.getString("currency"),
                         result.getString("description")
                 )
@@ -91,7 +91,7 @@ public class ExpensesService {
     }
 
     public HashMap<String, Integer> createNewExpense(
-            int userId, int amount, String currency,
+            int userId, float amount, String currency,
             String description, int categoryId, LocalDate date
     ) {
         String queryString = getQueryString();
@@ -103,7 +103,7 @@ public class ExpensesService {
     }
 
     public HashMap<String, Integer> updateExpense(
-            int expenseId, int userId, int amount, String currency,
+            int expenseId, int userId, float amount, String currency,
             String description, int categoryId, LocalDate date
     ) {
         String queryString = "userId='%s', amount='%s', currency='%s', date='%s', description='%s', category='%s'";

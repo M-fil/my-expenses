@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class UpdateExpenseModal extends CreateExpenseModal {
     private int expenseId;
-    private int expenseNumber;
+    private float expenseNumber;
     private LocalDate creationDate;
     private int selectedCategoryIndex;
     private ArrayList<ExpenseCategory> categories;
@@ -28,7 +28,7 @@ public class UpdateExpenseModal extends CreateExpenseModal {
     }
 
     public UpdateExpenseModal setExpenseValues(
-            int expenseId, int expenseNumber, LocalDate creationDate, int categoryId, String description
+            int expenseId, float expenseNumber, LocalDate creationDate, int categoryId, String description
     ) {
         this.expenseId = expenseId;
         this.expenseNumber = expenseNumber;
@@ -43,13 +43,18 @@ public class UpdateExpenseModal extends CreateExpenseModal {
     private void updateExpense(
             String expenseText, String description, int selectedCategoryIndex, LocalDate date
     ) {
-        int expenseResult = Integer.parseInt(expenseText);
-        int categoryNumber = categories.get(selectedCategoryIndex).id;
-        String descriptionResult = description == "" ? CreateExpenseModal.Text.get("no-description") : description;
-        System.out.println("expenseId: " + expenseId);
-        HashMap<String, Integer> result = expensesService.updateExpense(
-                expenseId, 1, expenseResult, "$", descriptionResult, categoryNumber, date
-        );
+        String errorMessage = checkIfFieldsAreValid(expenseText, date);
+        if (errorMessage == "") {
+            float expenseResult = Float.parseFloat(expenseText);
+            int categoryNumber = categories.get(selectedCategoryIndex).id;
+            String descriptionResult = description == "" ? CreateExpenseModal.Text.get("no-description") : description;
+            System.out.println("expenseId: " + expenseId);
+            HashMap<String, Integer> result = expensesService.updateExpense(
+                    expenseId, 1, expenseResult, "$", descriptionResult, categoryNumber, date
+            );
+        } else {
+            errorBlock.changeErrorText(errorMessage);
+        }
     }
 
     @Override
@@ -69,6 +74,7 @@ public class UpdateExpenseModal extends CreateExpenseModal {
                     selectCategoryBox.getSelectedIndex(),
                     datePicker.getDate()
             );
+            errorBlock.changeErrorText("");
             Expenses.getInstance().rerenderExpenses();
         });
 

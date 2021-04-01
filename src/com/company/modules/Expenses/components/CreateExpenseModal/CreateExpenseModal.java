@@ -1,6 +1,7 @@
 package com.company.modules.Expenses.components.CreateExpenseModal;
 
 import com.company.core.components.ComponentEntity.ComponentEntity;
+import com.company.core.components.ErrorBlock.ErrorBlock;
 import com.company.core.components.InputItem.InputItem;
 import com.company.core.components.NumberTextField.NumberTextField;
 import com.company.core.components.PageEntity.PageEntity;
@@ -20,9 +21,11 @@ import java.util.HashMap;
 
 public class CreateExpenseModal extends ComponentEntity {
     static public int DEFAULT_DIALOG_WIDTH = 350;
-    static public int DEFAULT_DIALOG_HEIGHT = 350;
+    static public int DEFAULT_DIALOG_HEIGHT = 450;
     static private int DEFAULT_DIALOG_PADDING = 30;
     static public String DEFAULT_TITLE = "Create Expense";
+    static protected float MINIMUM_EXPENSE_NUMBER = 0.1f;
+    static protected float MAXIMUM_EXPENSE_NUMBER = 10_000;
 
     private int width;
     private int height;
@@ -35,6 +38,7 @@ public class CreateExpenseModal extends ComponentEntity {
     protected InputItem descriptionInput;
     protected DatePicker datePicker;
     protected JDialog dialog;
+    protected ErrorBlock errorBlock;
 
     public CreateExpenseModal(int width, int height) {
         CreateExpenseModal.Text.put("no-description", "No Description");
@@ -43,6 +47,9 @@ public class CreateExpenseModal extends ComponentEntity {
         CreateExpenseModal.Text.put("expense-label", "expense number");
         CreateExpenseModal.Text.put("category-label", "select category");
         CreateExpenseModal.Text.put("expense-date-label", "select expense date");
+
+        CreateExpenseModal.Text.put("expense-number-error", "The expense number should be between " + MINIMUM_EXPENSE_NUMBER + " and " + MAXIMUM_EXPENSE_NUMBER);
+        CreateExpenseModal.Text.put("date-error", "An expense date should be less than " + LocalDate.now());
 
         this.width = width;
         this.height = height;
@@ -59,13 +66,44 @@ public class CreateExpenseModal extends ComponentEntity {
         }
     }
 
+    protected String checkIfFieldsAreValid(
+            String expenseText, LocalDate date
+    ) {
+        try {
+            if (date == null) {
+                throw new Exception(CreateExpenseModal.Text.get("date-error"));
+            }
+            if (expenseText.trim() == "") {
+                throw new Exception(CreateExpenseModal.Text.get("expense-number-error"));
+            }
+
+            float expenseResult = Float.parseFloat(expenseText);
+            if (expenseResult < MINIMUM_EXPENSE_NUMBER || expenseResult > MAXIMUM_EXPENSE_NUMBER) {
+                throw new Exception(CreateExpenseModal.Text.get("expense-number-error"));
+            }
+            if (date.isAfter(LocalDate.now())) {
+                throw new Exception(CreateExpenseModal.Text.get("date-error"));
+            }
+
+            return "";
+        } catch (Exception error) {
+            return error.getLocalizedMessage();
+        }
+    }
+
     private void createExpense(
             String expenseText, String description, int selectedCategoryIndex, LocalDate date
     ) {
-        int expenseResult = Integer.parseInt(expenseText);
-        int categoryNumber = categories.get(selectedCategoryIndex).id;
-        String descriptionResult = description == "" ? CreateExpenseModal.Text.get("no-description") : description;
-        HashMap<String, Integer> result = expensesService.createNewExpense(1, expenseResult, "$", descriptionResult, categoryNumber, date);
+        String errorMessage = checkIfFieldsAreValid(expenseText, date);
+        if (errorMessage == "") {
+            float expenseResult = Float.parseFloat(expenseText);
+            System.out.println("expenseResult: " + expenseResult);;
+            int categoryNumber = categories.get(selectedCategoryIndex).id;
+            String descriptionResult = description == "" ? CreateExpenseModal.Text.get("no-description") : description;
+            HashMap<String, Integer> result = expensesService.createNewExpense(1, expenseResult, "$", descriptionResult, categoryNumber, date);
+        } else {
+            errorBlock.changeErrorText(errorMessage);
+        }
     }
 
     private <T extends JComponent> JPanel createElementWithLabel(T component, String label) {
@@ -112,8 +150,11 @@ public class CreateExpenseModal extends ComponentEntity {
         JPanel comboBoxContainer = createElementWithLabel(selectCategoryBox, CreateExpenseModal.Text.get("category-label"));
         datePicker = new DatePicker();
         JPanel datePickerContainer = createElementWithLabel(datePicker, CreateExpenseModal.Text.get("expense-date-label"));
+        errorBlock = new ErrorBlock("", 200, "center", Color.RED);
+        JPanel errorBlockElement = new JPanel();
+        errorBlockElement.add(errorBlock.render());
 
-        ComponentEntity.removeButtonAllActionListeners(createExpenseButton);
+        ComponentEntity.removeButtonAllActionListeners( createExpenseButton);
         createExpenseButton.addActionListener((event) -> {
             createExpense(
                     expenseInput.getTextValue(),
@@ -121,6 +162,7 @@ public class CreateExpenseModal extends ComponentEntity {
                     selectCategoryBox.getSelectedIndex(),
                     datePicker.getDate()
             );
+            errorBlock.changeErrorText("");
             Expenses.getInstance().rerenderExpenses();
         });
 
@@ -130,6 +172,7 @@ public class CreateExpenseModal extends ComponentEntity {
         wrapper.add(comboBoxContainer);
         wrapper.add(datePickerContainer);
         wrapper.add(createExpenseButtonContainer);
+        wrapper.add(errorBlockElement);
         dialog.add(wrapper);
         repaintDialog();
 

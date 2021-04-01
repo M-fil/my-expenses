@@ -6,13 +6,13 @@ import java.util.Date;
 public class Expense {
     public int id;
     public int userId;
-    public int amount;
+    public float amount;
     public String currency;
     public LocalDate date;
     public String description;
     public ExpenseCategory category;
 
-    public Expense(int amount, String currency, String description) {
+    public Expense(float amount, String currency, String description) {
         this.amount = amount;
         this.currency = currency;
         this.description = description;
