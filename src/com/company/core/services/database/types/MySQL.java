@@ -51,7 +51,14 @@ public class MySQL extends Database {
 
                 return returnData;
             } else if (requestType == Delete) {
+                int rows = statement.executeUpdate(query);
+                if (rows == 1) {
+                    HashMap<String, Integer> returnData = new HashMap<String, Integer>();
+                    returnData.put("result", 1);
+                    return returnData;
+                }
 
+                return null;
             } else if (requestType == Get) {
                 ResultSet result = statement.executeQuery(query);
                 return result;

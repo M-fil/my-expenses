@@ -2,10 +2,14 @@ package com.company.modules.Expenses.components.ExpenseItem;
 
 import com.company.core.components.ComponentEntity.ComponentEntity;
 import com.company.core.interfaces.ExpenseCategory;
+import com.company.core.services.expenses.ExpensesService;
+import com.company.modules.Expenses.Expenses;
 import com.company.modules.Expenses.components.CreateExpenseModal.UpdateExpenseModal;
+import com.company.modules.MainFrame;
 
 import javax.swing.*;
 import java.time.LocalDate;
+import java.util.HashMap;
 
 public class ExpenseItem extends ComponentEntity {
     private String description;
@@ -26,6 +30,7 @@ public class ExpenseItem extends ComponentEntity {
 
         ExpenseItem.Text.put("edit-button-text", "Edit");
         ExpenseItem.Text.put("delete-button-text", "Delete");
+        ExpenseItem.Text.put("delete-expense-question", "Are you sure that you want to delete this expense?");
     }
 
     public ExpenseItem setCategory(ExpenseCategory category) {
@@ -45,6 +50,15 @@ public class ExpenseItem extends ComponentEntity {
             ).setExpenseValues(id, amount, creationDate, category.id, description);
             updateModal.render();
             updateModal.show();
+        });
+        deleteButton.addActionListener((event) -> {
+            JFrame parent = MainFrame.getInstance().getFrame();
+            int result = JOptionPane.showConfirmDialog(parent, ExpenseItem.Text.get("delete-expense-question"));
+            boolean isConfirmed = result == 0;
+            if (isConfirmed) {
+                new ExpensesService().deleteExpense(id);
+                Expenses.getInstance().rerenderExpenses();
+            }
         });
 
         expenseContainer.add(label);

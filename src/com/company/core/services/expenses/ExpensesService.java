@@ -82,19 +82,14 @@ public class ExpensesService {
         }
     }
 
-    private String getQueryString() {
-        String listOfParams = "(userId, amount, currency, date, description, category)";
-        String repeatedParams = ("'%s',").repeat(6);
-        String listOfParamsToInsert = "(" + repeatedParams.substring(0, repeatedParams.length() - 1) + ")";
-
-        return listOfParams + " VALUES " + listOfParamsToInsert;
-    }
-
     public HashMap<String, Integer> createNewExpense(
             int userId, float amount, String currency,
             String description, int categoryId, LocalDate date
     ) {
-        String queryString = getQueryString();
+        String listOfParams = "(userId, amount, currency, date, description, category)";
+        String repeatedParams = ("'%s',").repeat(6);
+        String listOfParamsToInsert = "(" + repeatedParams.substring(0, repeatedParams.length() - 1) + ")";
+        String queryString = listOfParams + " VALUES " + listOfParamsToInsert;
         String query = String.format(
                 "INSERT INTO expenses " + queryString,
                 userId, amount, currency, date, description, categoryId
@@ -111,7 +106,12 @@ public class ExpensesService {
                 "UPDATE expenses SET " + queryString + " WHERE id='" + expenseId + "'",
                 userId, amount, currency, date, description, categoryId
         );
-        System.out.println(query);
+
         return dbHandler.update(query);
+    }
+
+    public HashMap<String, Integer> deleteExpense(int expenseId) {
+        String query = "DELETE FROM expenses WHERE id='" + expenseId + "'";
+        return dbHandler.delete(query);
     }
 }

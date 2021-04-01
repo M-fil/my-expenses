@@ -44,8 +44,8 @@ public class DatabaseHandler {
         return (HashMap<String, Integer>) makeRequest(query, RequestTypes.Insert);
     }
 
-    public void delete(String query) {
-        makeRequest(query, RequestTypes.Delete);
+    public HashMap<String, Integer> delete(String query) {
+        return (HashMap<String, Integer>) makeRequest(query, RequestTypes.Delete);
     }
 
     public HashMap<String, Integer> update(String query) {
