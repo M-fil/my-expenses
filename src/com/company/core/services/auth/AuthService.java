@@ -7,11 +7,11 @@ import com.company.modules.MainFrame;
 import com.company.modules.Registration.Registration;
 
 import java.sql.ResultSet;
-import java.util.HashMap;
 
 public class AuthService {
     DatabaseHandler dbHandler;
     MainFrame mainFrame;
+    private int authedUserId;
 
     public AuthService() {
         dbHandler = DatabaseHandler.getInstance();
@@ -19,18 +19,25 @@ public class AuthService {
     }
 
     public boolean checkIfUserAlreadyExists(String login, String password) {
-        String query = String.format("SELECT * FROM users WHERE `name`='%s' AND `password`='%s'", login, password);
-        ResultSet result = dbHandler.get(query);
-        boolean isCredentialsMatch = result != null;
+        try {
+            String query = String.format("SELECT * FROM users WHERE `name`='%s' AND `password`='%s'", login, password);
+            ResultSet result = dbHandler.get(query);
+            if (result != null && result.next()) {
+                authedUserId = result.getInt("id");
+            }
 
-        return isCredentialsMatch;
+            return true;
+        } catch (Exception error) {
+            return false;
+        }
     }
 
     public RequestResultType signInWithEmailAndPassword(String login, String password) {
         boolean isCredentialsMatch = checkIfUserAlreadyExists(login, password);
+        System.out.println("isCredentialsMatch: " + isCredentialsMatch);
 
         if (isCredentialsMatch) {
-            mainFrame.renderPage(new Expenses());
+            mainFrame.renderPage(new Expenses(authedUserId));
             return RequestResultType.Success;
         } else {
             return RequestResultType.Error;
@@ -46,6 +53,10 @@ public class AuthService {
         } else {
             return RequestResultType.Error;
         }
+    }
+
+    private void getUserIdByLoginAndPassword(String login, String password) {
+        String query = String.format("SELECT * FROM users WHERE `name`='%s' AND `password`='%s'", login, password);
     }
 
     public void signOut() {

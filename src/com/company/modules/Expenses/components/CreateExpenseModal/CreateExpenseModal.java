@@ -50,6 +50,7 @@ public class CreateExpenseModal extends ComponentEntity {
 
         CreateExpenseModal.Text.put("expense-number-error", "The expense number should be between " + MINIMUM_EXPENSE_NUMBER + " and " + MAXIMUM_EXPENSE_NUMBER);
         CreateExpenseModal.Text.put("date-error", "An expense date should be less than " + LocalDate.now());
+        CreateExpenseModal.Text.put("default-error", "Error while creating a new expense");
 
         this.width = width;
         this.height = height;
@@ -95,12 +96,22 @@ public class CreateExpenseModal extends ComponentEntity {
             String expenseText, String description, int selectedCategoryIndex, LocalDate date
     ) {
         String errorMessage = checkIfFieldsAreValid(expenseText, date);
-        if (errorMessage == "") {
+        int userId = Expenses.getAuthedUserId();
+        System.out.println();
+        if (userId <= 0) {
+            errorMessage = CreateExpenseModal.Text.get("default-error");
+        }
+
+        System.out.println("create userId: " + Expenses.getAuthedUserId());
+        System.out.println("is empty: " + errorMessage.isEmpty());
+        if (errorMessage.isEmpty()) {
             float expenseResult = Float.parseFloat(expenseText);
-            System.out.println("expenseResult: " + expenseResult);;
             int categoryNumber = categories.get(selectedCategoryIndex).id;
             String descriptionResult = description == "" ? CreateExpenseModal.Text.get("no-description") : description;
-            HashMap<String, Integer> result = expensesService.createNewExpense(1, expenseResult, "$", descriptionResult, categoryNumber, date);
+
+            expensesService.createNewExpense(
+                    userId, expenseResult, "$", descriptionResult, categoryNumber, date
+            );
         } else {
             errorBlock.changeErrorText(errorMessage);
         }

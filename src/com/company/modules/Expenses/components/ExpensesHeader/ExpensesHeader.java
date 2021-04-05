@@ -11,18 +11,23 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class ExpensesHeader extends ComponentEntity {
-    int expensesAmount;
-    String currency;
-    ExpensesService expensesService;
-    ArrayList<ExpenseCategory> expenseCategories;
+    private float expensesAmount;
+    private String currency;
+    private ExpensesService expensesService;
+    private ArrayList<ExpenseCategory> expenseCategories;
+    private JLabel totalExpensesLabel;
 
-    public ExpensesHeader(int expensesAmount, String currency, ArrayList<ExpenseCategory> categories) {
+    public ExpensesHeader(float expensesAmount, String currency, ArrayList<ExpenseCategory> categories) {
         ExpensesHeader.Text.put("create-expense-text", "Create New Expense");
 
         this.expensesAmount = expensesAmount;
         this.currency = currency;
         this.expenseCategories = categories;
         expensesService = new ExpensesService();
+    }
+
+    public void updateTotalAmount(float totalAmount) {
+        totalExpensesLabel.setText(String.valueOf(totalAmount) + "$");
     }
 
     @Override
@@ -32,7 +37,7 @@ public class ExpensesHeader extends ComponentEntity {
         headerContainer.setLayout(new BorderLayout());
 
         String totalExpensesText = expensesAmount + currency;
-        JLabel totalExpensesLabel = new JLabel(totalExpensesText);
+        totalExpensesLabel = new JLabel(totalExpensesText);
         totalExpensesLabel.setForeground(Color.WHITE);
 
         JButton createExpensesButton = new JButton(ExpensesHeader.Text.get("create-expense-text"));

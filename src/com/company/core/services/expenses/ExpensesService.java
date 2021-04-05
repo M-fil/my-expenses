@@ -3,6 +3,7 @@ package com.company.core.services.expenses;
 import com.company.core.interfaces.Expense;
 import com.company.core.interfaces.ExpenseCategory;
 import com.company.core.services.database.DatabaseHandler;
+import com.company.modules.Expenses.Expenses;
 
 import java.sql.ResultSet;
 import java.time.LocalDate;
@@ -59,7 +60,9 @@ public class ExpensesService {
 
     public ArrayList<Expense> getAllExpenses() {
         try {
-            ResultSet result = dbHandler.get("SELECT * FROM expenses");
+            System.out.println("getAllExpenses userId: " + Expenses.getAuthedUserId());
+            System.out.println("SELECT * FROM sys.expenses WHERE `userId`=" + Expenses.getAuthedUserId());
+            ResultSet result = dbHandler.get("SELECT * FROM sys.expenses WHERE userId=" + Expenses.getAuthedUserId());
             ArrayList<Expense> expenses = new ArrayList<Expense>();
             while (result.next()) {
                 ExpenseCategory expenseCategory = getCategoryById(result.getInt("category"));
@@ -82,6 +85,15 @@ public class ExpensesService {
         }
     }
 
+    static public float calculateTotalExpenses(ArrayList<Expense> expenses) {
+        float sum = 0;
+        for (Expense expense: expenses) {
+            sum += expense.amount;
+        }
+
+        return sum;
+    }
+
     public HashMap<String, Integer> createNewExpense(
             int userId, float amount, String currency,
             String description, int categoryId, LocalDate date
@@ -94,6 +106,7 @@ public class ExpensesService {
                 "INSERT INTO expenses " + queryString,
                 userId, amount, currency, date, description, categoryId
         );
+        System.out.println(query);
         return dbHandler.insert(query);
     }
 

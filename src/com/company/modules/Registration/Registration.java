@@ -17,6 +17,10 @@ public class Registration extends PageEntity {
     private ErrorBlock errorBlock;
 
     private static int DEFAULT_WRAPPER_PADDING = 20;
+    private static int MINIMUM_LOGIN_LENGTH = 3;
+    private static int MAXIMUM_LOGIN_LENGTH = 40;
+    private static int MINIMUM_PASSWORD_LENGTH = 6;
+    private static int MAXIMUM_PASSWORD_LENGTH = 16;
 
     public Registration() {
         super();
@@ -28,33 +32,48 @@ public class Registration extends PageEntity {
         Registration.Text.put("switch-to-sign-up", "Don't have an account? Sign up now!");
         Registration.Text.put("sign-up-error", "The user with these login and password already exists");
         Registration.Text.put("sign-in-error", "There is no user with these login and password");
+        Registration.Text.put("empty-values", "Password and login should not be empty.");
+        Registration.Text.put("password-validation-error", "The password length should be from " + MINIMUM_PASSWORD_LENGTH + " to " + MAXIMUM_PASSWORD_LENGTH + " symbols.");
+        Registration.Text.put("login-validation-error", "The login length should be from " + MINIMUM_LOGIN_LENGTH + " to " + MAXIMUM_LOGIN_LENGTH + " symbols.");
+
         isSignUpForm = true;
         authService = new AuthService();
         errorBlock = new ErrorBlock("", 200, "center", Color.RED);
     }
 
-    private void showErrorMessage(String errorMessage, RequestResultType result) {
-        if (result == RequestResultType.Error) {
-            errorBlock.changeErrorText(errorMessage);
-        }
-    }
-
     private void submitCredentials() {
-        String login = loginTextField.getText();
-        String password = passwordTextField.getText();
-        RequestResultType result = null;
+        try {
+            String login = loginTextField.getText().trim();
+            String password = passwordTextField.getText().trim();
+            String errorMessage = "";
+            RequestResultType result = null;
 
-        if (isSignUpForm) {
-            result = authService.signUpWithEmailAndPassword(login, password);
-            showErrorMessage(Registration.Text.get("sign-up-error"), result);
-        } else {
-            result = authService.signInWithEmailAndPassword(login, password);
-            showErrorMessage(Registration.Text.get("sign-in-error"), result);
-        }
+            if (login.isEmpty() || password.isEmpty()) {
+                throw new Exception(Registration.Text.get("empty-values"));
+            }
+//            if (login.length() < MINIMUM_LOGIN_LENGTH || login.length() > MAXIMUM_LOGIN_LENGTH) {
+//                throw new Exception(Registration.Text.get("login-validation-error"));
+//            }
+//            if (password.length() < MINIMUM_PASSWORD_LENGTH || password.length() > MAXIMUM_PASSWORD_LENGTH) {
+//                throw new Exception(Registration.Text.get("password-validation-error"));
+//            }
 
-        if (result == RequestResultType.Success) {
-            loginTextField.setText("");
-            passwordTextField.setText("");
+            if (isSignUpForm) {
+                result = authService.signUpWithEmailAndPassword(login, password);
+                errorMessage = Registration.Text.get("sign-up-error");
+            } else {
+                result = authService.signInWithEmailAndPassword(login, password);
+                errorMessage = Registration.Text.get("sign-in-error");
+            }
+
+            if (result == RequestResultType.Success) {
+                loginTextField.setText("");
+                passwordTextField.setText("");
+            } else {
+                throw new Exception(errorMessage);
+            }
+        } catch (Exception error) {
+            errorBlock.changeErrorText(error.getMessage());
         }
     }
 

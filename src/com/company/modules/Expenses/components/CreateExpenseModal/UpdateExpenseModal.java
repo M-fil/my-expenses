@@ -23,6 +23,7 @@ public class UpdateExpenseModal extends CreateExpenseModal {
         super(width, height);
 
         UpdateExpenseModal.Text.put("update-expense-button-text", "Update Expense");
+        UpdateExpenseModal.Text.put("default-error", "Error while updating an expense");
         categories = new ExpensesService().getAllCategories();
         setCategories(categories);
     }
@@ -44,13 +45,17 @@ public class UpdateExpenseModal extends CreateExpenseModal {
             String expenseText, String description, int selectedCategoryIndex, LocalDate date
     ) {
         String errorMessage = checkIfFieldsAreValid(expenseText, date);
-        if (errorMessage == "") {
+        int userId = Expenses.getAuthedUserId();
+        if (userId <= 0) {
+            errorMessage = UpdateExpenseModal.Text.get("default-error");
+        }
+
+        if (errorMessage.isEmpty()) {
             float expenseResult = Float.parseFloat(expenseText);
             int categoryNumber = categories.get(selectedCategoryIndex).id;
             String descriptionResult = description == "" ? CreateExpenseModal.Text.get("no-description") : description;
-            System.out.println("expenseId: " + expenseId);
-            HashMap<String, Integer> result = expensesService.updateExpense(
-                    expenseId, 1, expenseResult, "$", descriptionResult, categoryNumber, date
+            expensesService.updateExpense(
+                    expenseId, userId, expenseResult, "$", descriptionResult, categoryNumber, date
             );
         } else {
             errorBlock.changeErrorText(errorMessage);

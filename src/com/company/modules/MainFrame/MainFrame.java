@@ -40,7 +40,7 @@ public class MainFrame {
     private void init() {
         frame = new JFrame(MainFrame.Text.get("frame-title"));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(true);
+        frame.setResizable(false);
         frame.setSize(width, height);
         frame.setVisible(true);
 

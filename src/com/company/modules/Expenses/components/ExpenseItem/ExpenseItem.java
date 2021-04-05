@@ -9,7 +9,6 @@ import com.company.modules.MainFrame;
 
 import javax.swing.*;
 import java.time.LocalDate;
-import java.util.HashMap;
 
 public class ExpenseItem extends ComponentEntity {
     private String description;
