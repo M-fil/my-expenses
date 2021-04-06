@@ -17,12 +17,12 @@ public class ExpensesList extends ComponentEntity {
 
     @Override
     public JPanel render() {
-        JPanel expensesListContainer = new JPanel(new GridLayout(0, 1));
+        JPanel expensesListContainer = new JPanel();
+        expensesListContainer.setLayout(new BoxLayout(expensesListContainer, BoxLayout.Y_AXIS));
 
         JScrollPane scrollPane = new JScrollPane(expensesListContainer);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setBounds(50, 30, 300, 50);
 
         JPanel contentPane = new JPanel(null);
         contentPane.setPreferredSize(new Dimension(400, 300));

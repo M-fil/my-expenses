@@ -8,6 +8,7 @@ import com.company.modules.Expenses.components.CreateExpenseModal.UpdateExpenseM
 import com.company.modules.MainFrame;
 
 import javax.swing.*;
+import java.awt.*;
 import java.time.LocalDate;
 
 public class ExpenseItem extends ComponentEntity {
@@ -39,10 +40,21 @@ public class ExpenseItem extends ComponentEntity {
 
     @Override
     public JPanel render() {
-        JPanel expenseContainer = new JPanel();
+        JPanel expensesContainer = new JPanel();
+        expensesContainer.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, Color.BLACK));
+        JPanel expensesWrapper = new JPanel(new GridLayout(0, 1));
+
+        String extraInfoLabel = amount + currency + "/" + category.name + "/" + creationDate;
+        String topText = "<html><p>" + extraInfoLabel + "</p></html>";
+        String descriptionHTML = "<html><p style=\"width: 300px;\">" + description + "</p></html>";
+
+        JLabel priceAndCategoryLabel = new JLabel(topText);
+        Font font = priceAndCategoryLabel.getFont();
+        priceAndCategoryLabel.setFont(font.deriveFont(font.getStyle() | Font.BOLD));
+        JLabel descriptionLabel = new JLabel(descriptionHTML);
+
         editButton = new JButton(ExpenseItem.Text.get("edit-button-text"));
         deleteButton = new JButton(ExpenseItem.Text.get("delete-button-text"));
-        JLabel label = new JLabel(amount + currency + "/" + description + "/" + category.name);
         editButton.addActionListener((event) -> {
             UpdateExpenseModal updateModal = new UpdateExpenseModal(
                     UpdateExpenseModal.DEFAULT_DIALOG_WIDTH, UpdateExpenseModal.DEFAULT_DIALOG_HEIGHT
@@ -59,11 +71,17 @@ public class ExpenseItem extends ComponentEntity {
                 Expenses.getInstance().rerenderExpenses();
             }
         });
+        JPanel buttonsContainer = new JPanel();
+        JPanel labelsContainer = new JPanel(new BorderLayout());
 
-        expenseContainer.add(label);
-        expenseContainer.add(editButton);
-        expenseContainer.add(deleteButton);
+        labelsContainer.add(priceAndCategoryLabel, BorderLayout.NORTH);
+        labelsContainer.add(descriptionLabel);
+        buttonsContainer.add(editButton);
+        buttonsContainer.add(deleteButton);
+        expensesWrapper.add(labelsContainer);
+        expensesWrapper.add(buttonsContainer);
+        expensesContainer.add(expensesWrapper);
 
-        return expenseContainer;
+        return expensesContainer;
     }
 }

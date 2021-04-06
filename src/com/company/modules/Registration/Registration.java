@@ -51,18 +51,18 @@ public class Registration extends PageEntity {
             if (login.isEmpty() || password.isEmpty()) {
                 throw new Exception(Registration.Text.get("empty-values"));
             }
-//            if (login.length() < MINIMUM_LOGIN_LENGTH || login.length() > MAXIMUM_LOGIN_LENGTH) {
-//                throw new Exception(Registration.Text.get("login-validation-error"));
-//            }
-//            if (password.length() < MINIMUM_PASSWORD_LENGTH || password.length() > MAXIMUM_PASSWORD_LENGTH) {
-//                throw new Exception(Registration.Text.get("password-validation-error"));
-//            }
+            if (login.length() < MINIMUM_LOGIN_LENGTH || login.length() > MAXIMUM_LOGIN_LENGTH) {
+                throw new Exception(Registration.Text.get("login-validation-error"));
+            }
+            if (password.length() < MINIMUM_PASSWORD_LENGTH || password.length() > MAXIMUM_PASSWORD_LENGTH) {
+                throw new Exception(Registration.Text.get("password-validation-error"));
+            }
 
             if (isSignUpForm) {
                 result = authService.signUpWithEmailAndPassword(login, password);
                 errorMessage = Registration.Text.get("sign-up-error");
             } else {
-                result = authService.signInWithEmailAndPassword(login, password);
+                result = authService.signInWithEmailAndPassword(login, password, true);
                 errorMessage = Registration.Text.get("sign-in-error");
             }
 

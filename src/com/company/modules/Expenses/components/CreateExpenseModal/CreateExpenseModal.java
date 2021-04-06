@@ -58,6 +58,7 @@ public class CreateExpenseModal extends ComponentEntity {
         expensesService = new ExpensesService();
         categoriesNames = new ArrayList<String>();
         categories = new ArrayList<ExpenseCategory>();
+        errorBlock = new ErrorBlock("", 200, "center", Color.RED);
     }
 
     public void setCategories(ArrayList<ExpenseCategory> categories) {
@@ -97,13 +98,10 @@ public class CreateExpenseModal extends ComponentEntity {
     ) {
         String errorMessage = checkIfFieldsAreValid(expenseText, date);
         int userId = Expenses.getAuthedUserId();
-        System.out.println();
         if (userId <= 0) {
             errorMessage = CreateExpenseModal.Text.get("default-error");
         }
 
-        System.out.println("create userId: " + Expenses.getAuthedUserId());
-        System.out.println("is empty: " + errorMessage.isEmpty());
         if (errorMessage.isEmpty()) {
             float expenseResult = Float.parseFloat(expenseText);
             int categoryNumber = categories.get(selectedCategoryIndex).id;
@@ -112,6 +110,8 @@ public class CreateExpenseModal extends ComponentEntity {
             expensesService.createNewExpense(
                     userId, expenseResult, "$", descriptionResult, categoryNumber, date
             );
+            errorBlock.changeErrorText("");
+            Expenses.getInstance().rerenderExpenses();
         } else {
             errorBlock.changeErrorText(errorMessage);
         }
@@ -161,11 +161,10 @@ public class CreateExpenseModal extends ComponentEntity {
         JPanel comboBoxContainer = createElementWithLabel(selectCategoryBox, CreateExpenseModal.Text.get("category-label"));
         datePicker = new DatePicker();
         JPanel datePickerContainer = createElementWithLabel(datePicker, CreateExpenseModal.Text.get("expense-date-label"));
-        errorBlock = new ErrorBlock("", 200, "center", Color.RED);
         JPanel errorBlockElement = new JPanel();
         errorBlockElement.add(errorBlock.render());
 
-        ComponentEntity.removeButtonAllActionListeners( createExpenseButton);
+        ComponentEntity.removeButtonAllActionListeners(createExpenseButton);
         createExpenseButton.addActionListener((event) -> {
             createExpense(
                     expenseInput.getTextValue(),
@@ -173,8 +172,6 @@ public class CreateExpenseModal extends ComponentEntity {
                     selectCategoryBox.getSelectedIndex(),
                     datePicker.getDate()
             );
-            errorBlock.changeErrorText("");
-            Expenses.getInstance().rerenderExpenses();
         });
 
         createExpenseButtonContainer.add(createExpenseButton);

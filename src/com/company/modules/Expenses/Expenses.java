@@ -22,7 +22,6 @@ public class Expenses extends PageEntity {
     private JPanel expensesListElement;
 
     private ExpensesHeader expensesHeader;
-    private ExpensesList expensesList;
 
     public Expenses(int authedUserId) {
         super();

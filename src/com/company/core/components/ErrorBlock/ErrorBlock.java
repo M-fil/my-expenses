@@ -29,6 +29,8 @@ public class ErrorBlock extends ComponentEntity {
     public void changeErrorText(String newErrorText) {
         String htmlString = insertTextInHTML(newErrorText);
         errorLabel.setText(htmlString);
+        errorLabel.repaint();
+        errorLabel.revalidate();
     }
 
     @Override

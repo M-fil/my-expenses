@@ -32,9 +32,11 @@ public class AuthService {
         }
     }
 
-    public RequestResultType signInWithEmailAndPassword(String login, String password) {
+    public RequestResultType signInWithEmailAndPassword(String login, String password, boolean checkCreds) {
         boolean isCredentialsMatch = checkIfUserAlreadyExists(login, password);
-        System.out.println("isCredentialsMatch: " + isCredentialsMatch);
+        if (!checkCreds) {
+            isCredentialsMatch = true;
+        }
 
         if (isCredentialsMatch) {
             mainFrame.renderPage(new Expenses(authedUserId));
@@ -49,7 +51,7 @@ public class AuthService {
         boolean isCredentialsMatch = checkIfUserAlreadyExists(login, password);
         if (!isCredentialsMatch) {
             dbHandler.insert(query);
-            return signInWithEmailAndPassword(login, password);
+            return signInWithEmailAndPassword(login, password, false);
         } else {
             return RequestResultType.Error;
         }

@@ -2,8 +2,8 @@ package com.company.modules.Expenses.components.ExpensesHeader;
 
 import com.company.core.components.ComponentEntity.ComponentEntity;
 import com.company.core.interfaces.ExpenseCategory;
+import com.company.core.services.auth.AuthService;
 import com.company.core.services.expenses.ExpensesService;
-import com.company.modules.Expenses.Expenses;
 import com.company.modules.Expenses.components.CreateExpenseModal.CreateExpenseModal;
 
 import javax.swing.*;
@@ -16,29 +16,29 @@ public class ExpensesHeader extends ComponentEntity {
     private ExpensesService expensesService;
     private ArrayList<ExpenseCategory> expenseCategories;
     private JLabel totalExpensesLabel;
+    private AuthService authService;
 
     public ExpensesHeader(float expensesAmount, String currency, ArrayList<ExpenseCategory> categories) {
         ExpensesHeader.Text.put("create-expense-text", "Create New Expense");
+        ExpensesHeader.Text.put("logout-text", "Log out");
 
         this.expensesAmount = expensesAmount;
         this.currency = currency;
         this.expenseCategories = categories;
         expensesService = new ExpensesService();
+        authService = new AuthService();
     }
 
     public void updateTotalAmount(float totalAmount) {
-        totalExpensesLabel.setText(String.valueOf(totalAmount) + "$");
+        totalExpensesLabel.setText(totalAmount + currency);
     }
 
     @Override
     public JPanel render() {
         JPanel headerContainer = new JPanel();
-        headerContainer.setBackground(Color.RED);
-        headerContainer.setLayout(new BorderLayout());
 
         String totalExpensesText = expensesAmount + currency;
         totalExpensesLabel = new JLabel(totalExpensesText);
-        totalExpensesLabel.setForeground(Color.WHITE);
 
         JButton createExpensesButton = new JButton(ExpensesHeader.Text.get("create-expense-text"));
         createExpensesButton.addActionListener((event) -> {
@@ -47,9 +47,14 @@ public class ExpensesHeader extends ComponentEntity {
             modal.render();
             modal.show();
         });
+        JButton logOutButton = new JButton(ExpensesHeader.Text.get("logout-text"));
+        logOutButton.addActionListener((event) -> {
+            authService.signOut();
+        });
 
         headerContainer.add(totalExpensesLabel, BorderLayout.WEST);
         headerContainer.add(createExpensesButton, BorderLayout.EAST);
+        headerContainer.add(logOutButton);
 
         return  headerContainer;
     }

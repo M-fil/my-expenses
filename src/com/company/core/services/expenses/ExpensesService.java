@@ -60,8 +60,6 @@ public class ExpensesService {
 
     public ArrayList<Expense> getAllExpenses() {
         try {
-            System.out.println("getAllExpenses userId: " + Expenses.getAuthedUserId());
-            System.out.println("SELECT * FROM sys.expenses WHERE `userId`=" + Expenses.getAuthedUserId());
             ResultSet result = dbHandler.get("SELECT * FROM sys.expenses WHERE userId=" + Expenses.getAuthedUserId());
             ArrayList<Expense> expenses = new ArrayList<Expense>();
             while (result.next()) {
@@ -106,7 +104,6 @@ public class ExpensesService {
                 "INSERT INTO expenses " + queryString,
                 userId, amount, currency, date, description, categoryId
         );
-        System.out.println(query);
         return dbHandler.insert(query);
     }
 
