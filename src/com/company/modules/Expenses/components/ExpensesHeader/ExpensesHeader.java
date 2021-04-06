@@ -36,8 +36,7 @@ public class ExpensesHeader extends ComponentEntity {
     @Override
     public JPanel render() {
         JPanel headerContainer = new JPanel();
-
-        String totalExpensesText = expensesAmount + currency;
+        String totalExpensesText = String.format("%.2f", expensesAmount) + currency;
         totalExpensesLabel = new JLabel(totalExpensesText);
 
         JButton createExpensesButton = new JButton(ExpensesHeader.Text.get("create-expense-text"));

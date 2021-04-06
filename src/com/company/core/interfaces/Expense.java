@@ -12,11 +12,11 @@ public class Expense {
     public String description;
     public ExpenseCategory category;
 
-    public Expense(float amount, String currency, String description) {
+    public Expense(float amount, String currency, String description, LocalDate date) {
         this.amount = amount;
         this.currency = currency;
         this.description = description;
-        date = LocalDate.now();
+        this.date = date;
     }
 
     public Expense setUserId(int userIdToSet) {

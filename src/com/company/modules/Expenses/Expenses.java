@@ -47,8 +47,10 @@ public class Expenses extends PageEntity {
     }
 
     private void updateTotalAmount() {
-        float totalAmount = ExpensesService.calculateTotalExpenses(expenses);
-        expensesHeader.updateTotalAmount(totalAmount);
+        if (expenses != null) {
+            float totalAmount = ExpensesService.calculateTotalExpenses(expenses);
+            expensesHeader.updateTotalAmount(totalAmount);
+        }
     }
 
     public void rerenderExpenses() {

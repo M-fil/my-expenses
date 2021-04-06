@@ -6,9 +6,10 @@ import com.company.core.services.database.DatabaseHandler;
 import com.company.modules.Expenses.Expenses;
 
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.time.ZoneId;
+import java.util.*;
 
 public class ExpensesService {
     private DatabaseHandler dbHandler;
@@ -64,21 +65,24 @@ public class ExpensesService {
             ArrayList<Expense> expenses = new ArrayList<Expense>();
             while (result.next()) {
                 ExpenseCategory expenseCategory = getCategoryById(result.getInt("category"));
+                Date date = result.getDate("date");
+                LocalDate localDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(date));
 
                 Expense expense = new Expense(
                         result.getFloat("amount"),
                         result.getString("currency"),
-                        result.getString("description")
+                        result.getString("description"),
+                        localDate
                 )
                         .setExpenseId(result.getInt("userId"))
                         .setExpenseCategory(expenseCategory)
                         .setExpenseId(result.getInt("id"));
                 expenses.add(expense);
             }
+            Collections.sort(expenses, (expense1, expense2) -> expense2.date.compareTo(expense1.date));
 
             return expenses;
         } catch (Exception error) {
-            System.out.println("ERROR" + error.getMessage());
             return null;
         }
     }
