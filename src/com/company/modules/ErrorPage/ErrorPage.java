@@ -13,7 +13,7 @@ public class ErrorPage extends PageEntity {
     public ErrorPage(String errorMessage) {
         ErrorPage.Text.put("error-title", "Error");
         this.errorMessage = errorMessage;
-        errorBlock = new ErrorBlock(errorMessage, 400, "center", Color.RED);
+        errorBlock = new ErrorBlock(this.errorMessage, 400, "center", Color.RED);
     }
 
     @Override

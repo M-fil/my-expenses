@@ -12,6 +12,7 @@ public class ExpensesList extends ComponentEntity {
     private ArrayList<Expense> expenses;
 
     public ExpensesList(ArrayList<Expense> expenses) {
+        ExpensesList.Text.put("no-expenses-text", "There are no any expense now. Click 'Create expense' to create one");
         this.expenses = expenses;
     }
 
@@ -27,6 +28,10 @@ public class ExpensesList extends ComponentEntity {
         JPanel contentPane = new JPanel(null);
         contentPane.setPreferredSize(new Dimension(400, 300));
 
+        JPanel noElementsPanel = new JPanel(new BorderLayout());
+        JLabel noElementsLabel = new JLabel(ExpensesList.Text.get("no-expenses-text"));
+        noElementsPanel.add(noElementsLabel);
+
         for (Expense expense : expenses) {
             ExpenseItem expenseElement = new ExpenseItem(
                     expense.id,
@@ -39,7 +44,11 @@ public class ExpensesList extends ComponentEntity {
             expensesListContainer.add(expenseElement.render());
         }
 
-        contentPane.add(scrollPane);
+        if (expenses.size() == 0) {
+            contentPane.add(noElementsPanel);
+        } else {
+            contentPane.add(scrollPane);
+        }
 
         return contentPane;
     }

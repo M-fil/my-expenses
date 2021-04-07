@@ -1,11 +1,8 @@
 package com.company.core.interfaces;
-
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Expense {
     public int id;
-    public int userId;
     public float amount;
     public String currency;
     public LocalDate date;
@@ -17,11 +14,6 @@ public class Expense {
         this.currency = currency;
         this.description = description;
         this.date = date;
-    }
-
-    public Expense setUserId(int userIdToSet) {
-        userId = userIdToSet;
-        return this;
     }
 
     public Expense setExpenseId(int expenseId) {

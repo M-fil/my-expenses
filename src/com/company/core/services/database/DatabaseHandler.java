@@ -34,10 +34,8 @@ public class DatabaseHandler {
             }
             return DatabaseHandler.db.makeRequest(query, type);
         } catch (Exception error) {
-            System.out.println(error.getMessage());
+            return null;
         }
-
-        return null;
     }
 
     public HashMap<String, Integer> insert(String query) {

@@ -50,7 +50,6 @@ public class UpdateExpenseModal extends CreateExpenseModal {
             errorMessage = UpdateExpenseModal.Text.get("default-error");
         }
 
-        System.out.println("isEmpty: " + errorMessage.isEmpty());
         if (errorMessage.isEmpty()) {
             float expenseResult = Float.parseFloat(expenseText);
             int categoryNumber = categories.get(selectedCategoryIndex).id;

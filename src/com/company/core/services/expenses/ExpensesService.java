@@ -8,7 +8,6 @@ import com.company.modules.Expenses.Expenses;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 
 public class ExpensesService {
@@ -26,7 +25,6 @@ public class ExpensesService {
             while (result.next()) {
                 ExpenseCategory category = new ExpenseCategory(
                         result.getInt("id"),
-                        result.getInt("userId"),
                         result.getString("name")
                 );
                 categories.add(category);
@@ -34,7 +32,6 @@ public class ExpensesService {
 
             return categories;
         } catch (Exception error) {
-            System.out.println("ERROR" + error.getMessage());
             return null;
         }
     }
@@ -46,7 +43,6 @@ public class ExpensesService {
              if (result.next()) {
                 ExpenseCategory category = new ExpenseCategory(
                         result.getInt("id"),
-                        result.getInt("userId"),
                         result.getString("name")
                 );
                 return category;
@@ -54,7 +50,6 @@ public class ExpensesService {
 
             return null;
         } catch (Exception error) {
-            System.out.println("ERROR" + error.getMessage());
             return null;
         }
     }

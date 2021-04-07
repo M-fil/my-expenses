@@ -5,19 +5,11 @@ import com.company.core.services.database.DatabaseHandler;
 import com.company.core.services.database.types.MySQL;
 import com.company.core.services.propertiesReader.PropertiesReader;
 import com.company.modules.ErrorPage.ErrorPage;
-import com.company.modules.Expenses.Expenses;
 import com.company.modules.MainFrame;
 import com.company.modules.Registration.Registration;
 
-import javax.swing.*;
-import java.awt.*;
-
 public class Main {
-    DatabaseHandler dbHandler;
-    boolean isError;
-
     Main() {
-        isError = false;
         String url = PropertiesReader.getApiKey(SecretProperties.MYSQL_SERVER_URL);
         String username = PropertiesReader.getApiKey(SecretProperties.MYSQL_SERVER_USERNAME);
         String password = PropertiesReader.getApiKey(SecretProperties.MYSQL_SERVER_PASSWORD);
@@ -27,11 +19,9 @@ public class Main {
 
         if (mySqlDB == null) {
             mainFrame.renderPage(new ErrorPage(MySQL.Messages.get("db-init-error")));
-            isError = true;
         } else {
-            dbHandler = new DatabaseHandler().setDB(mySqlDB);
+            new DatabaseHandler().setDB(mySqlDB);
             mainFrame.renderPage(new Registration());
-            isError = false;
         }
     }
 

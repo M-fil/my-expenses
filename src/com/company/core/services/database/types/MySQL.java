@@ -31,7 +31,6 @@ public class MySQL extends Database {
             connection = DriverManager.getConnection(serverUrl, username, password);
             return RequestResultType.Success;
         } catch (Exception error) {
-            System.out.println("Error: " + error.getMessage());
             return RequestResultType.Error;
         }
     }
@@ -64,7 +63,7 @@ public class MySQL extends Database {
                 return result;
             }
         } catch (Exception error) {
-            System.out.println(error.getMessage());
+            return null;
         }
 
         return null;

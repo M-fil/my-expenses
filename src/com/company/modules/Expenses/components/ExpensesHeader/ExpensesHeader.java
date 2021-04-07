@@ -3,7 +3,6 @@ package com.company.modules.Expenses.components.ExpensesHeader;
 import com.company.core.components.ComponentEntity.ComponentEntity;
 import com.company.core.interfaces.ExpenseCategory;
 import com.company.core.services.auth.AuthService;
-import com.company.core.services.expenses.ExpensesService;
 import com.company.modules.Expenses.components.CreateExpenseModal.CreateExpenseModal;
 
 import javax.swing.*;
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 public class ExpensesHeader extends ComponentEntity {
     private float expensesAmount;
     private String currency;
-    private ExpensesService expensesService;
     private ArrayList<ExpenseCategory> expenseCategories;
     private JLabel totalExpensesLabel;
     private AuthService authService;
@@ -25,7 +23,6 @@ public class ExpensesHeader extends ComponentEntity {
         this.expensesAmount = expensesAmount;
         this.currency = currency;
         this.expenseCategories = categories;
-        expensesService = new ExpensesService();
         authService = new AuthService();
     }
 

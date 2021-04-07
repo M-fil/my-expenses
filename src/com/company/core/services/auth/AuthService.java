@@ -20,15 +20,37 @@ public class AuthService {
 
     public boolean checkIfUserAlreadyExists(String login, String password) {
         try {
-            String query = String.format("SELECT * FROM users WHERE `name`='%s' AND `password`='%s'", login, password);
+            String query = String.format("SELECT * FROM users WHERE BINARY `name`='%s' AND BINARY `password`='%s'", login, password);
             ResultSet result = dbHandler.get(query);
             if (result != null && result.next()) {
                 authedUserId = result.getInt("id");
+                String loginValue = result.getString("name");
+                String passwordValue = result.getString("password");
+                boolean isLoginsMatch = loginValue.equals(login);
+                boolean isPasswordMatch = passwordValue.equals(password);
+
+                return isLoginsMatch && isPasswordMatch;
             }
 
-            return true;
+            return false;
         } catch (Exception error) {
             return false;
+        }
+    }
+
+    private boolean checkIfLoginExists(String login) {
+        try {
+            String query = String.format("SELECT * FROM users WHERE BINARY `name`='%s'", login);
+            ResultSet result = dbHandler.get(query);
+            if (result != null && result.next()) {
+                String loginValue = result.getString("name");
+
+                return loginValue.equals(login);
+            }
+
+            return false;
+        } catch (Exception error) {
+            return  false;
         }
     }
 
@@ -48,17 +70,14 @@ public class AuthService {
 
     public RequestResultType signUpWithEmailAndPassword(String login, String password) {
         String query = String.format("INSERT INTO users (name, password) VALUES ('%s', '%s')", login, password);
-        boolean isCredentialsMatch = checkIfUserAlreadyExists(login, password);
-        if (!isCredentialsMatch) {
+        boolean isUserWithTheSameLoginExists = checkIfLoginExists(login);
+
+        if (!isUserWithTheSameLoginExists) {
             dbHandler.insert(query);
             return signInWithEmailAndPassword(login, password, false);
         } else {
             return RequestResultType.Error;
         }
-    }
-
-    private void getUserIdByLoginAndPassword(String login, String password) {
-        String query = String.format("SELECT * FROM users WHERE `name`='%s' AND `password`='%s'", login, password);
     }
 
     public void signOut() {
