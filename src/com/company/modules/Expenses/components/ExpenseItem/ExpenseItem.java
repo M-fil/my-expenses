@@ -4,7 +4,7 @@ import com.company.core.components.ComponentEntity.ComponentEntity;
 import com.company.core.interfaces.ExpenseCategory;
 import com.company.core.services.expenses.ExpensesService;
 import com.company.modules.Expenses.Expenses;
-import com.company.modules.Expenses.components.CreateExpenseModal.UpdateExpenseModal;
+import com.company.modules.Expenses.components.Modals.UpdateExpenseModal;
 import com.company.modules.MainFrame;
 
 import javax.swing.*;
@@ -44,7 +44,7 @@ public class ExpenseItem extends ComponentEntity {
         expensesContainer.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, Color.BLACK));
         JPanel expensesWrapper = new JPanel(new GridLayout(0, 1));
 
-        String extraInfoLabel = amount + currency + "/" + category.name + "/" + creationDate;
+        String extraInfoLabel = amount + currency + "/" + category.getName() + "/" + creationDate;
         String topText = "<html><p>" + extraInfoLabel + "</p></html>";
         String descriptionHTML = "<html><p style=\"width: 300px;\">" + description + "</p></html>";
 
@@ -58,7 +58,7 @@ public class ExpenseItem extends ComponentEntity {
         editButton.addActionListener((event) -> {
             UpdateExpenseModal updateModal = new UpdateExpenseModal(
                     UpdateExpenseModal.DEFAULT_DIALOG_WIDTH, UpdateExpenseModal.DEFAULT_DIALOG_HEIGHT
-            ).setExpenseValues(id, amount, creationDate, category.id, description);
+            ).setExpenseValues(id, amount, creationDate, category.getId(), description);
             updateModal.render();
             updateModal.show();
         });

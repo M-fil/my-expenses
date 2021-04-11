@@ -3,7 +3,7 @@ package com.company.modules.Expenses.components.ExpensesHeader;
 import com.company.core.components.ComponentEntity.ComponentEntity;
 import com.company.core.interfaces.ExpenseCategory;
 import com.company.core.services.auth.AuthService;
-import com.company.modules.Expenses.components.CreateExpenseModal.CreateExpenseModal;
+import com.company.modules.Expenses.components.Modals.CreateExpenseModal;
 
 import javax.swing.*;
 import java.awt.*;

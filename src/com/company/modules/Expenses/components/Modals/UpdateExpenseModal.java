@@ -1,15 +1,13 @@
-package com.company.modules.Expenses.components.CreateExpenseModal;
+package com.company.modules.Expenses.components.Modals;
 
 import com.company.core.components.ComponentEntity.ComponentEntity;
 import com.company.core.interfaces.ExpenseCategory;
 import com.company.core.services.expenses.ExpensesService;
 import com.company.modules.Expenses.Expenses;
-import jdk.jfr.Category;
 
 import javax.swing.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class UpdateExpenseModal extends CreateExpenseModal {
     private int expenseId;
@@ -34,7 +32,7 @@ public class UpdateExpenseModal extends CreateExpenseModal {
         this.expenseId = expenseId;
         this.expenseNumber = expenseNumber;
         this.creationDate = creationDate;
-        ExpenseCategory filteredCategories = categories.stream().filter((item) -> item.id == categoryId).findFirst().get();
+        ExpenseCategory filteredCategories = categories.stream().filter((item) -> item.getId() == categoryId).findFirst().get();
         this.selectedCategoryIndex = categories.indexOf(filteredCategories);
         this.description = description;
 
@@ -52,7 +50,7 @@ public class UpdateExpenseModal extends CreateExpenseModal {
 
         if (errorMessage.isEmpty()) {
             float expenseResult = Float.parseFloat(expenseText);
-            int categoryNumber = categories.get(selectedCategoryIndex).id;
+            int categoryNumber = categories.get(selectedCategoryIndex).getId();
             String descriptionResult = description == "" ? CreateExpenseModal.Text.get("no-description") : description;
             expensesService.updateExpense(
                     expenseId, userId, expenseResult, "$", descriptionResult, categoryNumber, date

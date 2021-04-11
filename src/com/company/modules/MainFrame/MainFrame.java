@@ -7,10 +7,10 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class MainFrame {
-    static public HashMap<String, String> Text = new HashMap<String, String>();
+    static private HashMap<String, String> Text = new HashMap<String, String>();
+    static private MainFrame instance = null;
     static public int DefaultWidth = 500;
     static public int DefaultHeight = 500;
-    static private MainFrame instance = null;
 
     private JFrame frame;
     private JPanel container;

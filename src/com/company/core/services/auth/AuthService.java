@@ -9,8 +9,8 @@ import com.company.modules.Registration.Registration;
 import java.sql.ResultSet;
 
 public class AuthService {
-    DatabaseHandler dbHandler;
-    MainFrame mainFrame;
+    private DatabaseHandler dbHandler;
+    private MainFrame mainFrame;
     private int authedUserId;
 
     public AuthService() {

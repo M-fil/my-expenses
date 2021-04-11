@@ -7,13 +7,15 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ErrorPage extends PageEntity {
-    String errorMessage;
-    ErrorBlock errorBlock;
+    private String errorMessage;
+    private ErrorBlock errorBlock;
+
+    static private int DEFAULT_ERROR_BLOCK_WIDTH = 400;
 
     public ErrorPage(String errorMessage) {
         ErrorPage.Text.put("error-title", "Error");
         this.errorMessage = errorMessage;
-        errorBlock = new ErrorBlock(this.errorMessage, 400, "center", Color.RED);
+        errorBlock = new ErrorBlock(this.errorMessage, DEFAULT_ERROR_BLOCK_WIDTH, "center", Color.RED);
     }
 
     @Override

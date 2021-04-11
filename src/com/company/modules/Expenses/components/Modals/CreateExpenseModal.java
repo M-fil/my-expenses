@@ -1,4 +1,4 @@
-package com.company.modules.Expenses.components.CreateExpenseModal;
+package com.company.modules.Expenses.components.Modals;
 
 import com.company.core.components.ComponentEntity.ComponentEntity;
 import com.company.core.components.ErrorBlock.ErrorBlock;
@@ -17,13 +17,11 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class CreateExpenseModal extends ComponentEntity {
     static public int DEFAULT_DIALOG_WIDTH = 350;
     static public int DEFAULT_DIALOG_HEIGHT = 450;
     static private int DEFAULT_DIALOG_PADDING = 30;
-    static public String DEFAULT_TITLE = "Create Expense";
     static protected float MINIMUM_EXPENSE_NUMBER = 0.1f;
     static protected float MAXIMUM_EXPENSE_NUMBER = 10_000;
 
@@ -51,6 +49,7 @@ public class CreateExpenseModal extends ComponentEntity {
         CreateExpenseModal.Text.put("expense-number-error", "The expense number should be between " + MINIMUM_EXPENSE_NUMBER + " and " + MAXIMUM_EXPENSE_NUMBER);
         CreateExpenseModal.Text.put("date-error", "An expense date should be less than " + LocalDate.now());
         CreateExpenseModal.Text.put("default-error", "Error while creating a new expense");
+        CreateExpenseModal.Text.put("default-title", "Create Expense");
 
         this.width = width;
         this.height = height;
@@ -64,7 +63,7 @@ public class CreateExpenseModal extends ComponentEntity {
     public void setCategories(ArrayList<ExpenseCategory> categories) {
         this.categories = categories;
         for (ExpenseCategory category : categories) {
-            categoriesNames.add(category.name);
+            categoriesNames.add(category.getName());
         }
     }
 
@@ -104,7 +103,7 @@ public class CreateExpenseModal extends ComponentEntity {
 
         if (errorMessage.isEmpty()) {
             float expenseResult = Float.parseFloat(expenseText);
-            int categoryNumber = categories.get(selectedCategoryIndex).id;
+            int categoryNumber = categories.get(selectedCategoryIndex).getId();
             String descriptionResult = description == "" ? CreateExpenseModal.Text.get("no-description") : description;
 
             expensesService.createNewExpense(
@@ -142,7 +141,7 @@ public class CreateExpenseModal extends ComponentEntity {
         JPanel wrapper = new JPanel();
         PageEntity.setTheSamePaddingForAllSides(CreateExpenseModal.DEFAULT_DIALOG_PADDING, wrapper);
         wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.Y_AXIS));
-        dialog = new JDialog(frame, CreateExpenseModal.DEFAULT_TITLE, Dialog.ModalityType.DOCUMENT_MODAL);
+        dialog = new JDialog(frame, Text.get("default-title"), Dialog.ModalityType.DOCUMENT_MODAL);
         dialog.setBounds(150, 150, width, height);
         dialog.setResizable(false);
         dialog.addWindowListener(new WindowAdapter() {

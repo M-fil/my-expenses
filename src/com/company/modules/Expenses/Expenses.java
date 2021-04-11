@@ -16,11 +16,9 @@ public class Expenses extends PageEntity {
     static private int AuthedUserId;
 
     private ExpensesService expensesService;
-
     private ArrayList<Expense> expenses;
     private ArrayList<ExpenseCategory> categoriesList;
     private JPanel expensesListElement;
-
     private ExpensesHeader expensesHeader;
 
     public Expenses(int authedUserId) {
