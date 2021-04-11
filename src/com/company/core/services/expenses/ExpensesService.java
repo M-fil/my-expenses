@@ -74,7 +74,7 @@ public class ExpensesService {
                         .setExpenseId(result.getInt("id"));
                 expenses.add(expense);
             }
-            Collections.sort(expenses, (expense1, expense2) -> expense2.date.compareTo(expense1.date));
+            Collections.sort(expenses, (expense1, expense2) -> expense2.getDate().compareTo(expense1.getDate()));
 
             return expenses;
         } catch (Exception error) {
@@ -85,7 +85,7 @@ public class ExpensesService {
     static public float calculateTotalExpenses(ArrayList<Expense> expenses) {
         float sum = 0;
         for (Expense expense: expenses) {
-            sum += expense.amount;
+            sum += expense.getAmount();
         }
 
         return sum;

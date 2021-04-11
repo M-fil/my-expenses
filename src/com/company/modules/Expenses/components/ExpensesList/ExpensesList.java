@@ -34,13 +34,13 @@ public class ExpensesList extends ComponentEntity {
 
         for (Expense expense : expenses) {
             ExpenseItem expenseElement = new ExpenseItem(
-                    expense.id,
-                    expense.amount,
-                    expense.currency,
-                    expense.description,
-                    expense.date
+                    expense.getId(),
+                    expense.getAmount(),
+                    expense.getCurrency(),
+                    expense.getDescription(),
+                    expense.getDate()
             );
-            expenseElement.setCategory(expense.category);
+            expenseElement.setCategory(expense.getExpenseCategory());
             expensesListContainer.add(expenseElement.render());
         }
 
